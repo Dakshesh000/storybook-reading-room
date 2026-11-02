@@ -35,6 +35,10 @@ export type GlyphPortalProps = {
   style?: GlyphPortalStyle;
   /** Called once per rendered scroll frame, never through React state. */
   onProgress?: (progress: number) => void;
+  /** Aim the camera at the top part of the focus letter instead of its largest ink patch. */
+  focusAnchor?: "auto" | "top";
+  /** "in" zooms into the letter (dark to light); "out" plays it in reverse (light to dark). */
+  direction?: "in" | "out";
 };
 
 const clamp = (n: number, a = 0, b = 1) => Math.min(b, Math.max(a, n));
@@ -47,7 +51,7 @@ type Ink = { x: number; y: number; radius: number; index: number };
 type Letter = { index: number; x: number; y: number; width: number; height: number };
 
 /** Largest opaque square, in linear time. Unlike a stem guess, it works in O, S and Ø. */
-function interior(context: CanvasRenderingContext2D, char: string, font: string): Omit<Ink, "index"> | null {
+function interior(context: CanvasRenderingContext2D, char: string, font: string, top = false): Omit<Ink, "index"> | null {
   const canvas = context.canvas;
   context.font = font;
   const m = context.measureText(char);
@@ -63,7 +67,8 @@ function interior(context: CanvasRenderingContext2D, char: string, font: string)
   const pixels = context.getImageData(0, 0, width, height).data;
   const rows = new Uint16Array(width + 1);
   let size = 0, bx = 0, by = 0;
-  for (let y = 0; y < height; y++) {
+  const limit = top ? pad + Math.ceil(ascent * 0.42) : height;
+  for (let y = 0; y < Math.min(height, limit); y++) {
     let diagonal = 0;
     for (let x = 0; x < width; x++) {
       const above = rows[x + 1];
@@ -89,7 +94,7 @@ function scrollParent(element: HTMLElement): HTMLElement | null {
 export default function GlyphPortal({
   word = "SUBLIME", focusChar, interactive = true, background, front, children, scrollLength = 2.4,
   fontFamily = DEFAULT_FONT, fontWeight = 900, annotations = false,
-  enterLabel = "Enter section", className, style, onProgress,
+  enterLabel = "Enter section", className, style, onProgress, focusAnchor = "auto", direction = "in",
 }: GlyphPortalProps) {
   const uid = `gp-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const clipId = `${uid}-clip`;
@@ -168,7 +173,7 @@ export default function GlyphPortal({
         letters.push({ index: offset, x: advances[offset] - m.actualBoundingBoxLeft,
           y: -m.actualBoundingBoxAscent, width: m.actualBoundingBoxLeft + m.actualBoundingBoxRight,
           height: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent });
-        const found = interior(context, char, scanFont);
+        const found = interior(context, char, scanFont, focusAnchor === "top" && offset === requested);
         if (found) candidates.push({ ...found, x: found.x + advances[offset], index: offset });
         offset += char.length;
       }
@@ -206,7 +211,7 @@ export default function GlyphPortal({
 
     const paint = (progress: number) => {
       const isStatic = motion.matches || !browserFrameSeen || stalled || !target;
-      const p = isStatic ? 0 : progress;
+      const p = isStatic ? 0 : direction === "out" ? 1 - progress : progress;
       const t = clamp(p / 0.78);
       const eased = t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
       const scale = Math.exp(Math.log(startScale) + Math.log(endScale / startScale) * eased);
@@ -338,7 +343,7 @@ export default function GlyphPortal({
       choices.removeEventListener("keydown", navigate);
       picker.removeEventListener("change", pick);
     };
-  }, [text, focusChar, interactive, fontFamily, weight, length, clipId, hasFront]);
+  }, [text, focusChar, focusAnchor, direction, interactive, fontFamily, weight, length, clipId, hasFront]);
 
   return (
     <section ref={sectionRef} id={uid} className={className} aria-label={text}

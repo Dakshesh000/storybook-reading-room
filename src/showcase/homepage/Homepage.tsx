@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
@@ -24,19 +24,10 @@ const wrap = "mx-auto max-w-content";
 const clients = ["QuartzAI", "Pollinate", "Nietzsche", "45 Degrees", "Railspeed", "Northwind", "Interlock", "Halcyon", "Brightline", "Lumen"];
 
 /* ============ Top bar + header ============ */
-type Transition = "fade" | "portal";
-
-function ThemeBar({ mode, setMode }: { mode: Transition; setMode: (m: Transition) => void }) {
+function ThemeBar() {
   return (
     <div className="dark sticky top-0 z-[60] flex items-center justify-center gap-2 border-b border-border bg-background/90 py-2 backdrop-blur">
       <Link to="/" className={cn(t.label, "rounded-[4px] text-muted-foreground hover:text-foreground", ring)}>Konsol</Link>
-      <span className={cn(t.label, "ml-4 text-muted-foreground")}>Transition:</span>
-      {(["fade", "portal"] as const).map((m) => (
-        <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}
-          className={cn(t.label, "rounded-[4px] px-2 py-0.5", mode === m ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground", ring)}>
-          {m === "fade" ? "Fade" : "Portal"}
-        </button>
-      ))}
     </div>
   );
 }
@@ -700,7 +691,8 @@ function Footer() {
   );
 }
 
-function Portal() {
+/** "Theme Change" portal: zooms through the top of the K in MARKETING into the light site. */
+function Portal({ onProgress, children }: { onProgress: (p: number) => void; children: ReactNode }) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     let live = true;
@@ -712,35 +704,21 @@ function Portal() {
   if (!ready) return <div className="h-svh" />;
   return (
     <GlyphPortal
-      word="KONSOL" focusChar="O" interactive={false} scrollLength={2.2}
-      fontFamily='"Inter", Arial, sans-serif' fontWeight={700} enterLabel="Step inside"
-      className="[&_[data-gp-caption]]:font-mono [&_[data-gp-caption]]:uppercase [&_[data-gp-caption]]:tracking-label"
+      word="MARKETING" focusChar="K" focusAnchor="top" direction="in" interactive={false} scrollLength={2.2}
+      fontFamily='"Inter", Arial, sans-serif' fontWeight={700} enterLabel="Scroll" onProgress={onProgress}
+      className="[&_[data-gp-caption]]:font-mono [&_[data-gp-caption]]:uppercase [&_[data-gp-caption]]:tracking-label [&_[data-gp-content]]:!p-0 [&_[data-gp-content]]:!block [&_[data-gp-content]]:text-foreground"
       style={{ "--gp-paper": "var(--background)", "--gp-ink": "var(--foreground)", "--gp-field": "var(--brand-white)", "--gp-foreground": "var(--brand-black)" }}
       background={<div className="absolute inset-0 bg-white" />}
     >
-      <div className={cn(wrap, "w-full px-6 text-center")}>
-        <h2 className={cn(t.h1, "text-black")}>Step inside the console.</h2>
-      </div>
+      {children}
     </GlyphPortal>
   );
 }
 
 export function Homepage() {
   // Single dark version of the website; the light version is archived.
-  // The page starts dark and turns light once the visitor scrolls past the hero.
-  const [mode, setMode] = useState<Transition>("fade");
+  // The page starts dark; the portal "Theme Change" after the hero turns it light.
   const [light, setLight] = useState(false);
-  const seam = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const check = () => {
-      const el = seam.current;
-      if (el) setLight(el.getBoundingClientRect().top < window.innerHeight * 0.6);
-    };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => { window.removeEventListener("scroll", check); window.removeEventListener("resize", check); };
-  }, [mode]);
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", !light);
@@ -748,12 +726,11 @@ export function Homepage() {
   }, [light]);
   return (
     <div className="min-h-screen overflow-x-clip bg-background text-foreground transition-colors duration-move ease-konsol motion-reduce:transition-none">
-      <ThemeBar mode={mode} setMode={setMode} />
+      <ThemeBar />
       <main>
         <Header />
         <Hero />
-        {mode === "portal" && <div className="mt-6"><Portal /></div>}
-        <div ref={seam} className="mt-6"><Intro /></div>
+        <div className="mt-6"><Portal onProgress={(p) => setLight(p >= 0.85)}><Intro /></Portal></div>
         <BluePanel />
         <Services />
         <About />
