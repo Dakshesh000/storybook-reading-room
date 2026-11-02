@@ -1,9 +1,196 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- The Konsol tokens (light) ---------- */
+:root {
+  /* Brand */
+  --brand-yellow-green: #98c74f;
+  --brand-indigo: #363bd3;
+  --brand-smart-blue: #4569c4;
+  --brand-evergreen: #1e2810;
+  --brand-parchment: #efe9e7;
+  --brand-emerald: #16a36a;
+  --brand-amber: #e5a100;
+  --brand-brick: #d2382f;
+
+  /* Roles */
+  --background: #ffffff;
+  --background-alt: #efe9e7;
+  --card: #ffffff;
+  --foreground: #1e2810;
+  --foreground-secondary: #3b3735;
+  --muted-foreground: #68625f;
+  --link: #363bd3;
+  --border: #dfd7d4;
+  --input: #68625f;
+  --ring: #363bd3;
+  --highlight: #c5e69b;
+
+  /* Sections */
+  --section-green: #98c74f;
+  --section-green-foreground: #1e2810;
+  --section-green-muted: #2f4600;
+  --section-blue: #4569c4;
+  --section-blue-foreground: #ffffff;
+  --section-blue-muted: #ecf1fc;
+  --section-indigo: #363bd3;
+  --section-indigo-foreground: #ffffff;
+  --section-indigo-muted: #d8e1ff;
+  --section-evergreen: #1e2810;
+  --section-evergreen-foreground: #efe9e7;
+  --section-evergreen-muted: #c5e69b;
+
+  /* Buttons */
+  --btn-green: #98c74f;
+  --btn-green-hover: #c5e69b;
+  --btn-green-pressed: #e9f5dd;
+  --btn-green-foreground: #1e2810;
+  --btn-indigo: #363bd3;
+  --btn-indigo-hover: #2422a2;
+  --btn-indigo-pressed: #141468;
+  --btn-indigo-foreground: #ffffff;
+  --btn-disabled: #efe9e7;
+  --btn-disabled-foreground: #a79f9d;
+
+  /* Status */
+  --success-bg: #ecf6f0;
+  --success-fg: #016e45;
+  --success-border: #16a36a;
+  --warning-bg: #fbf5ea;
+  --warning-fg: #4d3300;
+  --warning-border: #956800;
+  --error-bg: #ffedeb;
+  --error-fg: #991613;
+  --error-border: #d2382f;
+  --info-bg: #ecf1fc;
+  --info-fg: #2b4892;
+  --info-border: #4569c4;
 }
 
-body {
-  font-family: system-ui, -apple-system, sans-serif;
+/* ---------- Dark ---------- */
+.dark {
+  --background: #000000;
+  --background-alt: #272322;
+  --card: #272322;
+  --foreground: #efe9e7;
+  --foreground-secondary: #dfd7d4;
+  --muted-foreground: #a79f9d;
+  --link: #8ba2ff;
+  --border: #3b3735;
+  --input: #68625f;
+  --ring: #8ba2ff;
+  --highlight: #2f4600;
+  --section-evergreen: #efe9e7;
+  --section-evergreen-foreground: #1e2810;
+  --section-evergreen-muted: #2f4600;
+}
+
+@theme inline {
+  --color-yellow-green: var(--brand-yellow-green);
+  --color-indigo: var(--brand-indigo);
+  --color-smart-blue: var(--brand-smart-blue);
+  --color-evergreen: var(--brand-evergreen);
+  --color-parchment: var(--brand-parchment);
+  --color-emerald: var(--brand-emerald);
+  --color-amber: var(--brand-amber);
+  --color-brick: var(--brand-brick);
+
+  --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-link: var(--link);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-highlight: var(--highlight);
+
+  --color-section-green: var(--section-green);
+  --color-section-green-foreground: var(--section-green-foreground);
+  --color-section-green-muted: var(--section-green-muted);
+  --color-section-blue: var(--section-blue);
+  --color-section-blue-foreground: var(--section-blue-foreground);
+  --color-section-blue-muted: var(--section-blue-muted);
+  --color-section-indigo: var(--section-indigo);
+  --color-section-indigo-foreground: var(--section-indigo-foreground);
+  --color-section-indigo-muted: var(--section-indigo-muted);
+  --color-section-evergreen: var(--section-evergreen);
+  --color-section-evergreen-foreground: var(--section-evergreen-foreground);
+  --color-section-evergreen-muted: var(--section-evergreen-muted);
+
+  --color-btn-green: var(--btn-green);
+  --color-btn-green-hover: var(--btn-green-hover);
+  --color-btn-green-pressed: var(--btn-green-pressed);
+  --color-btn-green-foreground: var(--btn-green-foreground);
+  --color-btn-indigo: var(--btn-indigo);
+  --color-btn-indigo-hover: var(--btn-indigo-hover);
+  --color-btn-indigo-pressed: var(--btn-indigo-pressed);
+  --color-btn-indigo-foreground: var(--btn-indigo-foreground);
+  --color-btn-disabled: var(--btn-disabled);
+  --color-btn-disabled-foreground: var(--btn-disabled-foreground);
+
+  --color-success-bg: var(--success-bg);
+  --color-success-fg: var(--success-fg);
+  --color-success-border: var(--success-border);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-fg: var(--warning-fg);
+  --color-warning-border: var(--warning-border);
+  --color-error-bg: var(--error-bg);
+  --color-error-fg: var(--error-fg);
+  --color-error-border: var(--error-border);
+  --color-info-bg: var(--info-bg);
+  --color-info-fg: var(--info-fg);
+  --color-info-border: var(--info-border);
+
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-frame: 16px;
+  --radius-section: 32px;
+
+  --container-content: 1280px;
+
+  --tracking-label: 0.06em;
+
+  --ease-konsol: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-hover: 250ms;
+  --duration-reveal: 350ms;
+  --duration-move: 600ms;
+
+  --animate-reveal: konsol-reveal 350ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  --animate-arrow: konsol-arrow 600ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  @keyframes konsol-reveal {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes konsol-arrow {
+    0% { transform: translateX(0); opacity: 1; }
+    45% { transform: translateX(120%); opacity: 0; }
+    55% { transform: translateX(-120%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+}
+
+@layer base {
+  * { border-color: var(--border); }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }
