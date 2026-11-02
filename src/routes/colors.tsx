@@ -44,12 +44,12 @@ const roles = [
 const sections = ["green", "blue", "indigo", "evergreen"] as const;
 const statuses = ["success", "warning", "error", "info"] as const;
 
-function Swatch({ token, role }: { token: string; role: string }) {
+function Swatch({ token, role, cssVar }: { token: string; role: string; cssVar: string }) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="h-24 rounded-card border border-border" style={{ background: `var(--color-${token})` }} />
+      <div className="h-24 rounded-card border border-border" style={{ background: `var(--${cssVar})` }} />
       <p className="text-sm font-medium">{role}</p>
-      <Caption>--color-{token}</Caption>
+      <Caption>bg-{token} · --{cssVar}</Caption>
     </div>
   );
 }
@@ -69,12 +69,12 @@ function Colors() {
       <PageHeader eyebrow="Foundations" title="Colours" intro="Always reach for the token, never the raw value. Use the dark switch above to check both themes." />
       <Group title="Brand">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {brand.map(([t, r]) => <Swatch key={t} token={t} role={r} />)}
+          {brand.map(([t, r]) => <Swatch key={t} token={t} role={r} cssVar={`brand-${t}`} />)}
         </div>
       </Group>
       <Group title="Roles · switch with theme">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-6">
-          {roles.map(([t, r]) => <Swatch key={t} token={t} role={r} />)}
+          {roles.map(([t, r]) => <Swatch key={t} token={t} role={r} cssVar={t} />)}
         </div>
       </Group>
       <Group title="Sections · text follows the section">
@@ -92,11 +92,11 @@ function Colors() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {statuses.map((s) => (
             <div key={s} className="flex flex-col gap-2">
-              <div className={`rounded-card border px-4 py-6 font-medium capitalize bg-${s}-bg text-${s}-fg border-${s}-border`}
-                style={{ background: `var(--color-${s}-bg)`, color: `var(--color-${s}-fg)`, borderColor: `var(--color-${s}-border)` }}>
+              <div className="rounded-card border px-4 py-6 font-medium capitalize"
+                style={{ background: `var(--${s}-bg)`, color: `var(--${s}-fg)`, borderColor: `var(--${s}-border)` }}>
                 {s}
               </div>
-              <Caption>--color-{s}-bg / -fg / -border</Caption>
+              <Caption>bg-{s}-bg · text-{s}-fg · border-{s}-border</Caption>
             </div>
           ))}
         </div>
