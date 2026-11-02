@@ -236,3 +236,8 @@
     transition-duration: 1ms !important;
   }
 }
+
+@keyframes agent-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

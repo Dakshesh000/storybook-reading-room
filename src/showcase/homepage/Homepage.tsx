@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
+import { AgentStack } from "./AgentStack";
 import {
   ArrowBox, BwImg, ClientGlyph, Eyebrow, IconArrowLeft, IconArrowRight, IconArrowUpRight, IconChart, IconChevron,
   IconChevronRight, IconDots, IconLinkedIn, IconPlay, IconX, IconYouTube, InkReveal, Reveal,
@@ -297,10 +298,7 @@ function BluePanel() {
   return (
     <section className={cn(wrap, "pb-20")}>
       <div className="mx-3 grid gap-10 rounded-section bg-section-blue p-8 text-section-blue-foreground md:grid-cols-[minmax(0,22rem)_1fr] md:p-10">
-        {/* Reserved for the 4-agent demo (card on top, auto-switching avatar bar below). */}
-        <div className="flex flex-col justify-between gap-10" aria-hidden="true">
-          <div className="aspect-[4/5] w-full" />
-        </div>
+        <div className="pt-10"><AgentStack /></div>
         <div className="flex flex-col gap-10">
           <Reveal><h2 className={t.h2}>We build custom AI agents focused on clarity, automation, measurable growth and outcomes.</h2></Reveal>
           <div className="grid flex-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
