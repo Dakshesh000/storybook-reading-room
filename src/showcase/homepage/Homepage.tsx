@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { img } from "./images";
 import {
   ArrowBox, BwImg, ClientGlyph, Eyebrow, IconArrowLeft, IconArrowRight, IconArrowUpRight, IconChart, IconChevron,
-  IconChevronRight, IconDots, IconLinkedIn, IconPlay, IconStar, IconX, IconYouTube, InkReveal, Reveal,
+  IconChevronRight, IconDots, IconLinkedIn, IconPlay, IconX, IconYouTube, InkReveal, Reveal,
 } from "./parts";
 
 const t = {
@@ -264,19 +264,9 @@ function BluePanel() {
   return (
     <section className={cn(wrap, "pb-20")}>
       <div className="mx-3 grid gap-10 rounded-section bg-section-blue p-8 text-section-blue-foreground md:grid-cols-[minmax(0,22rem)_1fr] md:p-10">
-        <div className="flex flex-col justify-between gap-10">
-          <div className="relative overflow-hidden rounded-frame">
-            <BwImg src={img.clientPhone} alt="Client checking results on her phone" className="aspect-[4/5] w-full object-cover" />
-            <div className="absolute inset-x-0 bottom-0 p-4">
-              <p className="rounded-frame bg-btn-indigo-hover/90 p-4 text-center text-sm font-medium text-btn-indigo-foreground">
-                “Their agents gave us clarity and freed our team to focus on growth.”
-              </p>
-            </div>
-          </div>
-          <div>
-            <p className={cn(t.h2, "flex items-center gap-2")}><IconStar /> 5.0</p>
-            <p className="mt-1 text-section-blue-muted">Client satisfaction</p>
-          </div>
+        {/* Reserved for the 4-agent demo (card on top, auto-switching avatar bar below). */}
+        <div className="flex flex-col justify-between gap-10" aria-hidden="true">
+          <div className="aspect-[4/5] w-full" />
         </div>
         <div className="flex flex-col gap-10">
           <Reveal><h2 className={t.h2}>We build custom AI agents focused on clarity, automation, measurable growth and outcomes.</h2></Reveal>
