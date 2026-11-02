@@ -7,4 +7,5 @@ export * from "./components/konsol/alert";
 export * from "./components/konsol/form";
 export * from "./components/konsol/accordion";
 export * from "./components/konsol/media";
+export * from "./components/konsol/avatar";
 export { cn } from "./lib/utils";

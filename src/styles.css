@@ -241,3 +241,8 @@
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+
+@keyframes agent-glare {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  35%, 100% { transform: translateX(250%) skewX(-20deg); }
+}
