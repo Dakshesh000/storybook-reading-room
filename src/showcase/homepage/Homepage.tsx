@@ -297,11 +297,10 @@ function BluePanel() {
   return (
     <section className={cn(wrap, "pb-20")}>
       <div className="mx-3 grid gap-10 rounded-section bg-section-blue p-8 text-section-blue-foreground md:grid-cols-[minmax(0,22rem)_1fr] md:p-10">
-        <div className="pt-10"><AgentStack /></div>
+        <div className="flex flex-col"><AgentStack /></div>
         <div className="flex flex-col gap-10">
           <Reveal><h2 className={t.h2}>We build custom AI agents focused on clarity, automation, measurable growth and outcomes.</h2></Reveal>
-          <div className="grid flex-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-            <BwImg src={img.glassTowers} alt="Glass office towers" className="h-full min-h-72 w-full rounded-frame object-cover" />
+          <div className="grid flex-1 gap-6">
             <div className="flex flex-col gap-4">
               <a href="#" className={cn("cta-slide self-end rounded-control border border-transparent bg-btn-green text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover [--cta-box:2.75rem] [--cta-gap:1rem]", ring)}>
                 <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Book a demo</span>

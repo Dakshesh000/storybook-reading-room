@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "@/index";
 import { cn } from "@/lib/utils";
 import { ArrowBox } from "./parts";
@@ -16,22 +16,12 @@ const agents: Agent[] = [
   { name: "Echo", role: "Marketing agent", tagline: "Turns one idea into a week of on-brand content.", stat: "5×", statLabel: "Content output", img: echoImg },
 ];
 
-const INTERVAL = 7000;
-
 export function AgentStack() {
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % agents.length), INTERVAL);
-    return () => clearInterval(id);
-  }, [paused, active]);
+  const [active, setActive] = useState(3);
 
   return (
-    <div className="flex flex-col gap-6" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
-      <div className="relative aspect-[4/5] w-full" aria-live="polite">
+    <div className="flex h-full flex-col gap-6">
+      <div className="relative min-h-[28rem] w-full flex-1 mb-7" aria-live="polite">
         {agents.map((a, i) => {
           const depth = (i - active + agents.length) % agents.length;
           const front = depth === 0;
@@ -40,7 +30,7 @@ export function AgentStack() {
               className="group absolute inset-0 flex flex-col overflow-hidden rounded-frame bg-evergreen text-white shadow-lg transition-[transform,opacity] duration-move ease-konsol motion-reduce:transition-none"
               style={{
                 zIndex: agents.length - depth,
-                transform: `translateY(${-depth * 14}px) scale(${1 - depth * 0.05}) rotate(${front ? 0 : (depth % 2 ? -1 : 1) * depth * 1.5}deg)`,
+                transform: `translateY(${depth * 14}px) scale(${1 - depth * 0.05}) rotate(${front ? 0 : (depth % 2 ? -1 : 1) * depth * 1.5}deg)`,
                 opacity: depth > 2 ? 0 : 1,
               }}>
               <img src={a.img} alt="" width={768} height={960} loading="lazy"
@@ -67,7 +57,7 @@ export function AgentStack() {
         })}
       </div>
 
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col items-start gap-3">
         <AvatarGroup role="tablist" aria-label="Our agents" overlap="md">
           {agents.map((a, i) => (
             <button key={a.name} type="button" role="tab" aria-selected={i === active} aria-label={`${a.name}, ${a.role}`}
@@ -82,9 +72,6 @@ export function AgentStack() {
           ))}
         </AvatarGroup>
         <p className="font-heading text-sm font-semibold">{agents[active].name} <span className="font-sans font-normal text-section-blue-muted">· {agents[active].role}</span></p>
-        <span className="relative h-0.5 w-32 overflow-hidden rounded-full bg-white/25">
-          {!paused && <span key={active} aria-hidden className="absolute inset-0 origin-left animate-[agent-progress_7s_linear] bg-yellow-green" />}
-        </span>
       </div>
     </div>
   );
