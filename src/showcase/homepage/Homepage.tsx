@@ -269,7 +269,6 @@ function Intro() {
           </h2>
           <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
             <button type="button" aria-label="Play video: see how our agents plug in" className={cn("group relative aspect-[9/7] w-36 shrink-0 overflow-hidden rounded-control", ring)}>
-              <BwImg src={img.teamDashboard} alt="" className="h-full w-full object-cover" />
               <span className="absolute inset-0 m-auto grid size-9 place-items-center rounded-full bg-background text-foreground transition-transform duration-hover group-hover:scale-110">
                 <IconPlay />
               </span>
