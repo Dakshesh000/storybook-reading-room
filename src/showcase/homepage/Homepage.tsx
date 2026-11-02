@@ -4,6 +4,7 @@ import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
 import { AgentStack } from "./AgentStack";
+import GlyphPortal from "./GlyphPortal";
 import {
   ArrowBox, BwImg, ClientGlyph, Eyebrow, IconArrowLeft, IconArrowRight, IconArrowUpRight, IconChart, IconChevron,
   IconChevronRight, IconDots, IconLinkedIn, IconPlay, IconX, IconYouTube, InkReveal, Reveal,
@@ -23,10 +24,19 @@ const wrap = "mx-auto max-w-content";
 const clients = ["QuartzAI", "Pollinate", "Nietzsche", "45 Degrees", "Railspeed", "Northwind", "Interlock", "Halcyon", "Brightline", "Lumen"];
 
 /* ============ Top bar + header ============ */
-function ThemeBar() {
+type Transition = "fade" | "portal";
+
+function ThemeBar({ mode, setMode }: { mode: Transition; setMode: (m: Transition) => void }) {
   return (
-    <div className="sticky top-0 z-[60] flex items-center justify-center gap-2 border-b border-border bg-background/90 py-2 backdrop-blur">
+    <div className="dark sticky top-0 z-[60] flex items-center justify-center gap-2 border-b border-border bg-background/90 py-2 backdrop-blur">
       <Link to="/" className={cn(t.label, "rounded-[4px] text-muted-foreground hover:text-foreground", ring)}>Konsol</Link>
+      <span className={cn(t.label, "ml-4 text-muted-foreground")}>Transition:</span>
+      {(["fade", "portal"] as const).map((m) => (
+        <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}
+          className={cn(t.label, "rounded-[4px] px-2 py-0.5", mode === m ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground", ring)}>
+          {m === "fade" ? "Fade" : "Portal"}
+        </button>
+      ))}
     </div>
   );
 }
@@ -69,7 +79,7 @@ function Header() {
     </a>
   );
   return (
-    <header className={cn("sticky top-[42px] z-50", compact && "pointer-events-none")}>
+    <header className={cn("dark sticky top-[42px] z-50 text-foreground", compact && "pointer-events-none")}>
       <div className={cn("mx-auto flex max-w-[1440px] items-center", motion, compact ? "px-3 pt-3" : "px-6 py-6")}>
         {!compact && (
           <a href="#" aria-label="The Konsol home" className={cn("flex shrink-0 items-center rounded-control", ring)}>
@@ -690,20 +700,60 @@ function Footer() {
   );
 }
 
+function Portal() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    let live = true;
+    const done = () => live && setReady(true);
+    const timer = window.setTimeout(done, 1600);
+    document.fonts.load('700 100px "Inter"').then(done, done);
+    return () => { live = false; clearTimeout(timer); };
+  }, []);
+  if (!ready) return <div className="h-svh" />;
+  return (
+    <GlyphPortal
+      word="KONSOL" focusChar="O" interactive={false} scrollLength={2.2}
+      fontFamily='"Inter", Arial, sans-serif' fontWeight={700} enterLabel="Step inside"
+      className="[&_[data-gp-caption]]:font-mono [&_[data-gp-caption]]:uppercase [&_[data-gp-caption]]:tracking-label"
+      style={{ "--gp-paper": "var(--background)", "--gp-ink": "var(--foreground)", "--gp-field": "var(--brand-white)", "--gp-foreground": "var(--brand-black)" }}
+      background={<div className="absolute inset-0 bg-white" />}
+    >
+      <div className={cn(wrap, "w-full px-6 text-center")}>
+        <h2 className={cn(t.h1, "text-black")}>Step inside the console.</h2>
+      </div>
+    </GlyphPortal>
+  );
+}
+
 export function Homepage() {
   // Single dark version of the website; the light version is archived.
+  // The page starts dark and turns light once the visitor scrolls past the hero.
+  const [mode, setMode] = useState<Transition>("fade");
+  const [light, setLight] = useState(false);
+  const seam = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const check = () => {
+      const el = seam.current;
+      if (el) setLight(el.getBoundingClientRect().top < window.innerHeight * 0.6);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => { window.removeEventListener("scroll", check); window.removeEventListener("resize", check); };
+  }, [mode]);
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.add("dark");
+    root.classList.toggle("dark", !light);
     return () => root.classList.remove("dark");
-  }, []);
+  }, [light]);
   return (
-    <div className="min-h-screen overflow-x-clip bg-background text-foreground">
-      <ThemeBar />
+    <div className="min-h-screen overflow-x-clip bg-background text-foreground transition-colors duration-move ease-konsol motion-reduce:transition-none">
+      <ThemeBar mode={mode} setMode={setMode} />
       <main>
         <Header />
         <Hero />
-        <div className="mt-6"><Intro /></div>
+        {mode === "portal" && <div className="mt-6"><Portal /></div>}
+        <div ref={seam} className="mt-6"><Intro /></div>
         <BluePanel />
         <Services />
         <About />
