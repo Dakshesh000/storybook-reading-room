@@ -73,31 +73,45 @@ function Header({ dark }: { dark: boolean }) {
 
 /* ============ Hero ============ */
 function LogoRotator() {
-  const [tick, setTick] = useState(0);
+  // One slot swaps at a time, left to right: the old name slides up and out
+  // while the next one slides up into place.
+  const [slots, setSlots] = useState(() => [0, 1, 2, 3, 4, 5].map((i) => ({ cur: i, prev: -1 })));
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setTick((x) => x + 1), 2400);
+    let step = 0;
+    let next = 6;
+    const id = setInterval(() => {
+      const visible = window.matchMedia("(min-width: 768px)").matches ? 6 : 3;
+      const slot = step % visible;
+      step += 1;
+      setSlots((s) => {
+        const shown = new Set(s.slice(0, visible).map((v) => v.cur));
+        while (shown.has(next % clients.length)) next += 1;
+        const incoming = next % clients.length;
+        next += 1;
+        return s.map((v, i) => (i === slot ? { cur: incoming, prev: v.cur } : v));
+      });
+    }, 900);
     return () => clearInterval(id);
   }, []);
   return (
     <div className="mt-5 grid grid-cols-3 gap-4 md:grid-cols-6">
-      {Array.from({ length: 6 }, (_, slot) => {
-        const active = (slot + tick * 6) % clients.length;
-        return (
-          <div key={slot} className={cn("relative h-10", slot >= 3 && "hidden md:block")}>
-            {clients.map((name, i) => (
-              <div key={name} aria-hidden={i !== active}
-                className={cn(
-                  "absolute inset-0 flex items-center justify-center gap-2 rounded-control bg-background text-sm font-medium text-foreground transition-[opacity,transform] duration-move ease-konsol",
-                  i === active ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
-                )}>
-                <ClientGlyph i={i} />
-                <span className="whitespace-nowrap">{name}</span>
-              </div>
-            ))}
-          </div>
-        );
-      })}
+      {slots.map(({ cur, prev }, slot) => (
+        <div key={slot} className={cn("relative h-10 overflow-hidden rounded-control bg-background", slot >= 3 && "hidden md:block")}>
+          {clients.map((name, i) => (
+            <div key={name} aria-hidden={i !== cur}
+              className={cn(
+                "absolute inset-0 flex items-center justify-center gap-2 text-sm font-medium text-foreground ease-konsol",
+                i === cur && "translate-y-0 opacity-100 transition-[opacity,transform] duration-move",
+                i === prev && "-translate-y-full opacity-0 transition-[opacity,transform] duration-move",
+                i !== cur && i !== prev && "translate-y-full opacity-0",
+              )}>
+              <ClientGlyph i={i} />
+              <span className="whitespace-nowrap">{name}</span>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
@@ -105,16 +119,16 @@ function LogoRotator() {
 function Hero() {
   return (
     <section className={wrap}>
-      <h1 className={cn(t.display, "mt-6 px-6 text-center leading-[0.78]")}>Marketing</h1>
-      <div className="relative mx-3 mt-3 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
+      <h1 className={cn(t.display, "mt-[28px] px-6 text-center leading-[0.78]")}>Marketing</h1>
+      <div className="relative mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
         <img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
         <div className="relative z-20 max-w-md">
           <Reveal>
             <p className={cn(t.h2, "text-section-green-muted")}>Scale your ideas.</p>
             <p className={t.h2}>Automate with AI.</p>
             <p className="mt-5 text-section-green-muted">Custom agents, built and shipped in weeks.</p>
-            <a href="#" className={cn("cta-slide mt-6 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:3.5rem] [--cta-gap:1rem]", ring)}>
-              <ArrowBox /><span data-cta-label className="leading-12">Book a demo</span>
+            <a href="#" className={cn("cta-slide mt-6 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", ring)}>
+              <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Book a demo</span>
             </a>
           </Reveal>
         </div>
@@ -214,8 +228,8 @@ function BluePanel() {
           <div className="grid flex-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <BwImg src={img.glassTowers} alt="Glass office towers" className="h-full min-h-72 w-full rounded-frame object-cover" />
             <div className="flex flex-col gap-4">
-              <a href="#" className={cn("cta-slide self-end rounded-control bg-btn-green text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover [--cta-box:3rem] [--cta-gap:1rem]", ring)}>
-                <ArrowBox /><span data-cta-label className="leading-10">Book a demo</span>
+              <a href="#" className={cn("cta-slide self-end rounded-control border border-transparent bg-btn-green text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover [--cta-box:2.75rem] [--cta-gap:1rem]", ring)}>
+                <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Book a demo</span>
               </a>
               <div className="relative flex flex-1 items-center justify-center rounded-frame bg-btn-indigo-hover/40 p-8">
                 <div className="w-full max-w-sm rounded-frame border border-border bg-background p-4 text-foreground shadow-sm">
@@ -512,14 +526,14 @@ function Pricing() {
                 <div className={cn("relative border-y p-8", pl.hi ? "border-section-evergreen-foreground/15" : "border-border bg-background-alt")}>
                   <p className="min-h-12 max-w-[12rem]">{pl.tag}</p>
                   <a href="#" className={cn(
-                    "cta-slide mt-6 rounded-control text-sm font-medium transition-colors duration-hover [--cta-box:1.75rem] [--cta-gap:0.75rem]",
+                    "cta-slide mt-6 rounded-control border border-transparent font-medium transition-colors duration-hover [--cta-box:2.75rem] [--cta-gap:1rem]",
                     pl.hi ? "bg-background text-foreground hover:bg-background-alt" : "bg-btn-indigo text-btn-indigo-foreground hover:bg-btn-indigo-hover",
                     ring,
                   )}>
-                    <span data-cta-box className={cn("grid place-items-center rounded-control", pl.hi ? "bg-btn-indigo text-btn-indigo-foreground" : "bg-btn-indigo-foreground/15")}>
+                    <span data-cta-box className={cn("grid h-9 place-items-center rounded-control", pl.hi ? "bg-btn-indigo text-btn-indigo-foreground" : "bg-btn-indigo-foreground/15")}>
                       <IconChevronRight />
                     </span>
-                    <span data-cta-label className="leading-7">Get started</span>
+                    <span data-cta-label className="leading-9">Get started</span>
                   </a>
                 </div>
                 <ul className={cn("relative space-y-3 p-8 text-sm", muted)}>
