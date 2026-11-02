@@ -330,11 +330,8 @@ function BluePanel() {
           <Reveal><h2 className={t.h2}>We build custom AI agents focused on clarity, automation, measurable growth and outcomes.</h2></Reveal>
           <div className="grid flex-1 gap-6">
             <div className="flex flex-col gap-4">
-              <a href="#" className={cn("cta-slide self-end rounded-control border border-transparent bg-btn-green text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover [--cta-box:2.75rem] [--cta-gap:1rem]", ring)}>
-                <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Book a demo</span>
-              </a>
-              <div className="relative flex flex-1 items-center justify-center rounded-frame bg-btn-indigo-hover/40 p-8">
-                <div className="w-full max-w-sm rounded-frame border border-border bg-background p-4 text-foreground shadow-sm">
+              <div className="relative flex flex-1 items-stretch rounded-frame bg-btn-indigo-hover/40 p-4">
+                <div className="flex w-full flex-col justify-between rounded-frame border border-border bg-background p-6 text-foreground">
                   <div className="flex items-center justify-between">
                     <p className="flex items-center gap-2 text-sm font-medium">
                       <span className="grid size-7 place-items-center rounded-full bg-indigo text-btn-indigo-foreground"><IconChart /></span>
