@@ -23,33 +23,15 @@ const wrap = "mx-auto max-w-content";
 const clients = ["QuartzAI", "Pollinate", "Nietzsche", "45 Degrees", "Railspeed", "Northwind", "Interlock", "Halcyon", "Brightline", "Lumen"];
 
 /* ============ Top bar + header ============ */
-function ThemeBar({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => void }) {
+function ThemeBar() {
   return (
     <div className="sticky top-0 z-[60] flex items-center justify-center gap-2 border-b border-border bg-background/90 py-2 backdrop-blur">
-      <Link to="/" className={cn(t.label, "mr-2 rounded-[4px] text-muted-foreground hover:text-foreground", ring)}>Konsol</Link>
-      {(["Light", "Dark"] as const).map((m) => {
-        const active = (m === "Dark") === dark;
-        return (
-          <button
-            key={m}
-            type="button"
-            aria-pressed={active}
-            onClick={() => setDark(m === "Dark")}
-            className={cn(
-              "rounded-full border px-3 py-1 font-mono text-xs transition-colors duration-hover",
-              active ? "border-foreground bg-foreground text-background" : "border-border text-foreground hover:bg-background-alt",
-              ring,
-            )}
-          >
-            {m}
-          </button>
-        );
-      })}
+      <Link to="/" className={cn(t.label, "rounded-[4px] text-muted-foreground hover:text-foreground", ring)}>Konsol</Link>
     </div>
   );
 }
 
-function Header({ dark }: { dark: boolean }) {
+function Header() {
   const [compact, setCompact] = useState(false);
   const [hover, setHover] = useState(false);
   const [focusIn, setFocusIn] = useState(false);
@@ -91,7 +73,7 @@ function Header({ dark }: { dark: boolean }) {
       <div className={cn("mx-auto flex max-w-[1440px] items-center", motion, compact ? "px-3 pt-3" : "px-6 py-6")}>
         {!compact && (
           <a href="#" aria-label="The Konsol home" className={cn("flex shrink-0 items-center rounded-control", ring)}>
-            <Logo color={dark ? "white" : "black"} className="size-10" />
+            <Logo color="white" className="size-10" />
             <span className="ml-3 whitespace-nowrap font-heading text-lg font-semibold max-[380px]:hidden">The Konsol</span>
           </a>
         )}
@@ -117,7 +99,7 @@ function Header({ dark }: { dark: boolean }) {
               {/* Logo sits on the bar itself (not inside a clipped cell) so it's never cut off */}
               <a href="#" aria-label="The Konsol home" inert={!open}
                 className={cn("absolute left-3 top-[33px] z-10 -translate-y-1/2 rounded-control", motion, ring, open ? "opacity-100" : "pointer-events-none opacity-0")}>
-                <Logo color={dark ? "white" : "black"} className="h-8 w-auto shrink-0 object-contain" />
+                <Logo color="white" className="h-8 w-auto shrink-0 object-contain" />
               </a>
               {/* Left: links 1-2 hug the centred button (sm and up) */}
               <div inert={!open} className={cn("flex min-w-0 items-center justify-end overflow-hidden whitespace-nowrap", motion, open ? "pl-14 pr-3 opacity-100 lg:pr-8" : "pointer-events-none px-0 opacity-0")}>
@@ -161,10 +143,55 @@ function Header({ dark }: { dark: boolean }) {
 }
 
 /* ============ Hero ============ */
+const SWAP_MS = 2400;
+
+/** Decorative canvas: the outgoing name breaks apart into drifting dust. */
+function DustBurst({ text, run }: { text: string; run: number }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const c = ref.current;
+    if (!run || !c) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    const w = c.offsetWidth, h = c.offsetHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.scale(dpr, dpr);
+    const font = getComputedStyle(c).font;
+    ctx.font = font.includes("px") ? font : "500 14px sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillStyle = "#000";
+    ctx.fillText(text, w / 2 + 12, h / 2);
+    const data = ctx.getImageData(0, 0, w * dpr, h * dpr).data;
+    const pts: { x: number; y: number; vx: number; vy: number; d: number }[] = [];
+    const step = Math.max(2, Math.round(2 * dpr));
+    for (let y = 0; y < h * dpr; y += step) for (let x = 0; x < w * dpr; x += step) {
+      if (data[(y * w * dpr + x) * 4 + 3] > 128)
+        pts.push({ x: x / dpr, y: y / dpr, vx: 0.2 + Math.random() * 0.8, vy: -0.2 - Math.random() * 0.6, d: Math.random() * 0.35 });
+    }
+    const t0 = performance.now(), dur = 1100;
+    let raf = 0;
+    const frame = (now: number) => {
+      const p = (now - t0) / dur;
+      ctx.clearRect(0, 0, w, h);
+      for (const q of pts) {
+        const k = Math.max(0, (p - q.d) / (1 - q.d));
+        if (k >= 1) continue;
+        const e = k * k;
+        ctx.globalAlpha = 1 - k;
+        ctx.fillRect(q.x + q.vx * e * 40, q.y + q.vy * e * 30, 1.2, 1.2);
+      }
+      if (p < 1) raf = requestAnimationFrame(frame); else ctx.clearRect(0, 0, w, h);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [run, text]);
+  return <canvas ref={ref} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full text-sm font-medium" />;
+}
+
 function LogoRotator() {
-  // One slot swaps at a time, left to right: the old name slides up and out
-  // while the next one slides up into place.
-  const [slots, setSlots] = useState(() => [0, 1, 2, 3, 4, 5].map((i) => ({ cur: i, prev: -1 })));
+  // One slot swaps at a time, left to right: the old name dissolves into dust
+  // while the next one resolves from a soft blur.
+  const [slots, setSlots] = useState(() => [0, 1, 2, 3, 4, 5].map((i) => ({ cur: i, prev: -1, run: 0 })));
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let step = 0;
@@ -178,27 +205,27 @@ function LogoRotator() {
         while (shown.has(next % clients.length)) next += 1;
         const incoming = next % clients.length;
         next += 1;
-        return s.map((v, i) => (i === slot ? { cur: incoming, prev: v.cur } : v));
+        return s.map((v, i) => (i === slot ? { cur: incoming, prev: v.cur, run: v.run + 1 } : v));
       });
-    }, 900);
+    }, SWAP_MS);
     return () => clearInterval(id);
   }, []);
   return (
     <div className="mt-5 grid grid-cols-3 gap-4 md:grid-cols-6">
-      {slots.map(({ cur, prev }, slot) => (
-        <div key={slot} className={cn("relative h-10 overflow-hidden rounded-control bg-background", slot >= 3 && "hidden md:block")}>
+      {slots.map(({ cur, prev, run }, slot) => (
+        <div key={slot} className={cn("relative h-10 overflow-hidden rounded-control bg-white text-black", slot >= 3 && "hidden md:block")}>
           {clients.map((name, i) => (
             <div key={name} aria-hidden={i !== cur}
               className={cn(
-                "absolute inset-0 flex items-center justify-center gap-2 text-sm font-medium text-foreground ease-konsol",
-                i === cur && "translate-y-0 opacity-100 transition-[opacity,transform] duration-move",
-                i === prev && "-translate-y-full opacity-0 transition-[opacity,transform] duration-move",
-                i !== cur && i !== prev && "translate-y-full opacity-0",
+                "absolute inset-0 flex items-center justify-center gap-2 text-sm font-medium text-black ease-konsol transition-[opacity,filter,transform] motion-reduce:transition-opacity",
+                i === cur ? "opacity-100 blur-0 scale-100 duration-[1200ms] delay-300" : "opacity-0 blur-sm scale-95",
+                i === prev && "duration-200",
               )}>
               <ClientGlyph i={i} />
               <span className="whitespace-nowrap">{name}</span>
             </div>
           ))}
+          {prev >= 0 && <DustBurst text={clients[prev]} run={run} />}
         </div>
       ))}
     </div>
@@ -664,15 +691,17 @@ function Footer() {
 }
 
 export function Homepage() {
-  const [dark, setDark] = useState(false);
+  // Single dark version of the website; the light version is archived.
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
+    const root = document.documentElement;
+    root.classList.add("dark");
+    return () => root.classList.remove("dark");
+  }, []);
   return (
     <div className="min-h-screen overflow-x-clip bg-background text-foreground">
-      <ThemeBar dark={dark} setDark={setDark} />
+      <ThemeBar />
       <main>
-        <Header dark={dark} />
+        <Header />
         <Hero />
         <div className="mt-6"><Intro /></div>
         <BluePanel />
