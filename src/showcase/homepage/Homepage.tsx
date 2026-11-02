@@ -77,11 +77,11 @@ function Header({ dark }: { dark: boolean }) {
     const ro = new ResizeObserver(() => setBtnW(el.offsetWidth));
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [compact]);
   const motion = "transition-all duration-move ease-konsol motion-reduce:transition-none";
   const links = ["About", "Services", "Insights", "Testimonials"];
   const cta = (
-    <a ref={btnRef} href="#" className={cn("cta-slide shrink-0 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", compact ? "inline-flex" : "hidden sm:inline-flex", ring)}>
+    <a ref={btnRef} href="#" className={cn("cta-slide shrink-0 whitespace-nowrap rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", compact ? "inline-flex" : "hidden sm:inline-flex", ring)}>
       <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
     </a>
   );
@@ -113,22 +113,32 @@ function Header({ dark }: { dark: boolean }) {
           {compact && <span aria-hidden className="absolute -inset-10 -z-10" />}
           {compact ? (
             <>
-              {/* Left: logo pinned left, links 1-2 hug the centred button */}
-              <div inert={!open} className={cn("relative flex min-w-0 items-center justify-end overflow-hidden whitespace-nowrap", motion, open ? "pl-12 pr-4 opacity-100 md:pr-8" : "pointer-events-none px-0 opacity-0")}>
-                <a href="#" aria-label="The Konsol home" className={cn("absolute left-1 top-1/2 -translate-y-1/2 rounded-control", ring)}>
-                  <Logo color={dark ? "white" : "black"} className="size-8" />
-                </a>
-                <nav aria-label="Main" className="flex gap-4 text-sm md:gap-8 md:text-base">
+              {/* Logo sits on the bar itself (not inside a clipped cell) so it's never cut off */}
+              <a href="#" aria-label="The Konsol home" inert={!open}
+                className={cn("absolute left-3 top-[33px] z-10 -translate-y-1/2 rounded-control", motion, ring, open ? "opacity-100" : "pointer-events-none opacity-0")}>
+                <Logo color={dark ? "white" : "black"} className="h-8 w-auto shrink-0 object-contain" />
+              </a>
+              {/* Left: links 1-2 hug the centred button (sm and up) */}
+              <div inert={!open} className={cn("flex min-w-0 items-center justify-end overflow-hidden whitespace-nowrap", motion, open ? "pl-14 pr-3 opacity-100 lg:pr-8" : "pointer-events-none px-0 opacity-0")}>
+                <nav aria-label="Main" className="hidden gap-4 text-sm sm:flex lg:gap-8 lg:text-base">
                   {links.slice(0, 2).map((n) => (
                     <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
                   ))}
                 </nav>
               </div>
               {cta}
-              <div inert={!open} className={cn("flex min-w-0 items-center overflow-hidden whitespace-nowrap", motion, open ? "pl-4 opacity-100 md:pl-8" : "pointer-events-none px-0 opacity-0")}>
-                <nav aria-label="More" className="flex gap-4 text-sm md:gap-8 md:text-base">
+              <div inert={!open} className={cn("flex min-w-0 items-center overflow-hidden whitespace-nowrap", motion, open ? "pl-3 opacity-100 lg:pl-8" : "pointer-events-none px-0 opacity-0")}>
+                <nav aria-label="More" className="hidden gap-4 text-sm sm:flex lg:gap-8 lg:text-base">
                   {links.slice(2).map((n) => (
                     <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
+                  ))}
+                </nav>
+              </div>
+              {/* Phones: all links on a second row */}
+              <div inert={!open} className={cn("col-span-3 grid sm:hidden", motion, open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0")}>
+                <nav aria-label="Main mobile" className="flex flex-wrap justify-center overflow-hidden text-sm">
+                  {links.map((n) => (
+                    <a key={n} href="#" className={cn("inline-flex min-h-11 items-center rounded-[4px] px-3 hover:underline underline-offset-4", ring)}>{n}</a>
                   ))}
                 </nav>
               </div>
