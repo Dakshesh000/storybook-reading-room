@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ColorsRouteImport } from './routes/colors'
 import { Route as ComponentsRouteImport } from './routes/components'
+import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as LogosRouteImport } from './routes/logos'
 import { Route as TypographyRouteImport } from './routes/typography'
 import { Route as Char91__componentChar93PreviewSplatRouteImport } from './routes/[__component].preview.$'
@@ -30,6 +31,11 @@ const ColorsRoute = ColorsRouteImport.update({
 const ComponentsRoute = ComponentsRouteImport.update({
   id: '/components',
   path: '/components',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomepageRoute = HomepageRouteImport.update({
+  id: '/homepage',
+  path: '/homepage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogosRoute = LogosRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
   '/components': typeof ComponentsRoute
+  '/homepage': typeof HomepageRoute
   '/logos': typeof LogosRoute
   '/typography': typeof TypographyRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
   '/components': typeof ComponentsRoute
+  '/homepage': typeof HomepageRoute
   '/logos': typeof LogosRoute
   '/typography': typeof TypographyRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/colors': typeof ColorsRoute
   '/components': typeof ComponentsRoute
+  '/homepage': typeof HomepageRoute
   '/logos': typeof LogosRoute
   '/typography': typeof TypographyRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/'
     | '/colors'
     | '/components'
+    | '/homepage'
     | '/logos'
     | '/typography'
     | '/__component/preview/$'
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/'
     | '/colors'
     | '/components'
+    | '/homepage'
     | '/logos'
     | '/typography'
     | '/__component/preview/$'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/'
     | '/colors'
     | '/components'
+    | '/homepage'
     | '/logos'
     | '/typography'
     | '/__component/preview/$'
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ColorsRoute: typeof ColorsRoute
   ComponentsRoute: typeof ComponentsRoute
+  HomepageRoute: typeof HomepageRoute
   LogosRoute: typeof LogosRoute
   TypographyRoute: typeof TypographyRoute
   Char91__componentChar93PreviewSplatRoute: typeof Char91__componentChar93PreviewSplatRoute
@@ -144,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/components'
       fullPath: '/components'
       preLoaderRoute: typeof ComponentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/homepage': {
+      id: '/homepage'
+      path: '/homepage'
+      fullPath: '/homepage'
+      preLoaderRoute: typeof HomepageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/logos': {
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ColorsRoute: ColorsRoute,
   ComponentsRoute: ComponentsRoute,
+  HomepageRoute: HomepageRoute,
   LogosRoute: LogosRoute,
   TypographyRoute: TypographyRoute,
   Char91__componentChar93PreviewSplatRoute:
