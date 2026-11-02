@@ -245,7 +245,7 @@ function LogoRotator() {
 function Hero() {
   return (
     <section className={wrap}>
-      <h1 className={cn(t.display, "mt-[28px] px-6 text-center leading-[0.78]")}>Marketing</h1>
+      <h1 className={cn(t.display, "mt-[28px] px-6 text-center leading-[0.78]")}>MARKETING</h1>
       <div className="relative mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
         <img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
         <div className="relative z-20 max-w-md">
@@ -254,7 +254,7 @@ function Hero() {
             <p className={t.h2}>Automate with AI.</p>
             <p className="mt-5 text-section-green-muted">Custom agents, built and shipped in weeks.</p>
             <a href="#" className={cn("cta-slide mt-6 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", ring)}>
-              <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Book a demo</span>
+              <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Explore The Magic{"\n"}</span>
             </a>
           </Reveal>
         </div>
