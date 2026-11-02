@@ -21,6 +21,7 @@
   --brand-evergreen: #1e2810;
   --brand-parchment: #efe9e7;
   --brand-white: #ffffff;
+  --brand-black: #000000;
   --brand-emerald: #16a36a;
   --brand-amber: #e5a100;
   --brand-brick: #d2382f;
@@ -104,6 +105,7 @@
   --color-evergreen: var(--brand-evergreen);
   --color-parchment: var(--brand-parchment);
   --color-white: var(--brand-white);
+  --color-black: var(--brand-black);
   --color-emerald: var(--brand-emerald);
   --color-amber: var(--brand-amber);
   --color-brick: var(--brand-brick);

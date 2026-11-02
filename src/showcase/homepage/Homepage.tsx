@@ -61,7 +61,7 @@ function Header({ dark }: { dark: boolean }) {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="#" className={cn("cta-slide hidden rounded-control bg-indigo text-white transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem] sm:inline-flex", ring)}>
+          <a href="#" className={cn("cta-slide hidden rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem] sm:inline-flex", ring)}>
             <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
           </a>
         </div>
@@ -105,15 +105,15 @@ function LogoRotator() {
 function Hero() {
   return (
     <section className={wrap}>
-      <h1 className={cn(t.display, "px-6 text-center")}>Marketing</h1>
-      <div className="relative mx-3 mt-8 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
+      <h1 className={cn(t.display, "mt-6 px-6 text-center leading-[0.78]")}>Marketing</h1>
+      <div className="relative mx-3 mt-3 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
         <img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
         <div className="relative z-20 max-w-md">
           <Reveal>
             <p className={cn(t.h2, "text-section-green-muted")}>Scale your ideas.</p>
             <p className={t.h2}>Automate with AI.</p>
             <p className="mt-5 text-section-green-muted">Custom agents, built and shipped in weeks.</p>
-            <a href="#" className={cn("cta-slide mt-6 rounded-control bg-indigo text-white transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:3.5rem] [--cta-gap:1rem]", ring)}>
+            <a href="#" className={cn("cta-slide mt-6 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:3.5rem] [--cta-gap:1rem]", ring)}>
               <ArrowBox /><span data-cta-label className="leading-12">Book a demo</span>
             </a>
           </Reveal>
