@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { img } from "./images";
 import {
   ArrowBox, BwImg, ClientGlyph, Eyebrow, IconArrowLeft, IconArrowRight, IconArrowUpRight, IconChart, IconChevron,
-  IconChevronRight, IconClose, IconDots, IconLinkedIn, IconMenu, IconPlay, IconStar, IconX, IconYouTube, InkReveal, Reveal,
+  IconChevronRight, IconDots, IconLinkedIn, IconPlay, IconStar, IconX, IconYouTube, InkReveal, Reveal,
 } from "./parts";
 
 const t = {
@@ -49,12 +49,6 @@ function ThemeBar({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => v
 }
 
 function Header({ dark }: { dark: boolean }) {
-  const [open, setOpen] = useState(false);
-  const menu = [
-    ["Company", ["About us", "Our team", "Careers", "Press"]],
-    ["Services", ["AI agents", "Automation", "AI strategy", "Integrations"]],
-    ["Resources", ["Insights", "Case studies", "Guides", "FAQ"]],
-  ] as const;
   return (
     <header className="relative z-50">
       <div className={cn(wrap, "flex items-center justify-between px-6 py-6")}>
@@ -67,54 +61,12 @@ function Header({ dark }: { dark: boolean }) {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <a href="#" className={cn("group/cta hidden items-center gap-6 rounded-control bg-btn-green py-1.5 pl-4 pr-1.5 text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover sm:flex", ring)}>
-            Get Started <ArrowBox className="h-9 w-11" />
+          <a href="#" className={cn("cta-slide hidden rounded-control bg-indigo text-white transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem] sm:inline-flex", ring)}>
+            <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
           </a>
-          <button type="button" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}
-            className={cn("grid size-12 place-items-center rounded-control border border-foreground", ring)}>
-            <IconMenu />
-          </button>
         </div>
       </div>
 
-      <div
-        role="dialog"
-        aria-label="Menu"
-        aria-hidden={!open}
-        inert={!open}
-        className={cn(
-          "fixed inset-x-0 top-0 border-b border-border bg-background transition-transform duration-500 ease-konsol",
-          open ? "translate-y-0" : "-translate-y-full",
-        )}
-      >
-        <div className={cn(wrap, "px-6 py-6")}>
-          <div className="flex items-center justify-between">
-            <Logo color={dark ? "white" : "black"} className="size-10" />
-            <button type="button" aria-label="Close menu" onClick={() => setOpen(false)}
-              className={cn("grid size-12 place-items-center rounded-control border border-foreground", ring)}>
-              <IconClose />
-            </button>
-          </div>
-          <div className="grid gap-10 py-12 md:grid-cols-4">
-            {menu.map(([title, items]) => (
-              <div key={title}>
-                <p className={cn(t.label, "mb-4 text-muted-foreground")}>{title}</p>
-                <ul className="space-y-3">
-                  {items.map((i) => (
-                    <li key={i}><a href="#" className={cn(t.h3, "rounded-[4px] hover:underline", ring)}>{i}</a></li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            <div className="flex flex-col justify-between gap-6 rounded-frame bg-background-alt p-6">
-              <p className="text-muted-foreground">We build custom AI agents that take busy work off your team and turn it into growth.</p>
-              <a href="#" className={cn("group/cta inline-flex items-center justify-between rounded-control bg-btn-green px-4 py-3 text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover", ring)}>
-                Get Started <IconArrowRight className="group-hover/cta:animate-arrow" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
     </header>
   );
 }
@@ -161,8 +113,8 @@ function Hero() {
             <p className={cn(t.h2, "text-section-green-muted")}>Scale your ideas.</p>
             <p className={t.h2}>Automate with AI.</p>
             <p className="mt-5 text-section-green-muted">Custom agents, built and shipped in weeks.</p>
-            <a href="#" className={cn("group/cta mt-6 inline-flex items-center gap-4 rounded-control bg-evergreen p-1.5 pr-6 text-parchment transition-colors duration-hover hover:bg-foreground-secondary", ring)}>
-              <ArrowBox className="h-12 w-14" /> Book a demo
+            <a href="#" className={cn("cta-slide mt-6 rounded-control bg-indigo text-white transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:3.5rem] [--cta-gap:1rem]", ring)}>
+              <ArrowBox /><span data-cta-label className="leading-12">Book a demo</span>
             </a>
           </Reveal>
         </div>
@@ -262,8 +214,8 @@ function BluePanel() {
           <div className="grid flex-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
             <BwImg src={img.glassTowers} alt="Glass office towers" className="h-full min-h-72 w-full rounded-frame object-cover" />
             <div className="flex flex-col gap-4">
-              <a href="#" className={cn("group/cta inline-flex items-center gap-6 self-end rounded-control bg-btn-green p-1.5 pl-5 text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover", ring)}>
-                Book a demo <ArrowBox className="h-10 w-12" />
+              <a href="#" className={cn("cta-slide self-end rounded-control bg-btn-green text-btn-green-foreground transition-colors duration-hover hover:bg-btn-green-hover [--cta-box:3rem] [--cta-gap:1rem]", ring)}>
+                <ArrowBox /><span data-cta-label className="leading-10">Book a demo</span>
               </a>
               <div className="relative flex flex-1 items-center justify-center rounded-frame bg-btn-indigo-hover/40 p-8">
                 <div className="w-full max-w-sm rounded-frame border border-border bg-background p-4 text-foreground shadow-sm">
@@ -560,14 +512,14 @@ function Pricing() {
                 <div className={cn("relative border-y p-8", pl.hi ? "border-section-evergreen-foreground/15" : "border-border bg-background-alt")}>
                   <p className="min-h-12 max-w-[12rem]">{pl.tag}</p>
                   <a href="#" className={cn(
-                    "group/cta mt-6 inline-flex items-center gap-3 rounded-control py-1.5 pl-1.5 pr-4 text-sm font-medium transition-colors duration-hover",
+                    "cta-slide mt-6 rounded-control text-sm font-medium transition-colors duration-hover [--cta-box:1.75rem] [--cta-gap:0.75rem]",
                     pl.hi ? "bg-background text-foreground hover:bg-background-alt" : "bg-btn-indigo text-btn-indigo-foreground hover:bg-btn-indigo-hover",
                     ring,
                   )}>
-                    <span className={cn("grid size-7 place-items-center overflow-hidden rounded-control", pl.hi ? "bg-btn-indigo text-btn-indigo-foreground" : "bg-btn-indigo-foreground/15")}>
-                      <IconChevronRight className="group-hover/cta:animate-arrow" />
+                    <span data-cta-box className={cn("grid place-items-center rounded-control", pl.hi ? "bg-btn-indigo text-btn-indigo-foreground" : "bg-btn-indigo-foreground/15")}>
+                      <IconChevronRight />
                     </span>
-                    Get started
+                    <span data-cta-label className="leading-7">Get started</span>
                   </a>
                 </div>
                 <ul className={cn("relative space-y-3 p-8 text-sm", muted)}>

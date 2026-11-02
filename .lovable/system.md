@@ -12,7 +12,7 @@ The Konsol is a B2B marketing agency (brand revamps, websites, AI powered outbou
 1. **Tokens only.** Never write hex/rgb values. Use token utilities (`bg-section-green`, `text-foreground-secondary`, `border-border`, `rounded-control`). See `rules/design-tokens.md`.
 2. **Section text follows the section.** Build big page bands with `<Section tone="green|blue|indigo|evergreen|plain|alt">`; never set a section background by hand. Use `<SectionMuted>` for supporting copy inside it.
 3. **One colour per section,** alternating down the page. Don't put two brand-coloured sections next to each other in the same colour.
-4. **Buttons:** indigo is the main call to action; green is for header "Get started" and hero "Book a demo". Buttons carry the arrow by default — keep it for forward actions.
+4. **Buttons:** indigo is the main call to action; green is for header "Get started" and hero "Book a demo". Buttons carry the arrow by default — keep it for forward actions. **Arrow motion:** the arrow sits in its own container on the left; on hover/focus the whole container slides to the right edge while the label shifts left (the `cta-slide` utility with `data-cta-box` / `data-cta-label` children). Never animate the arrow icon on its own.
 5. **Accent colours (emerald, amber, brick) are for status only** — use `<Alert>`, never as decoration.
 6. **Cards** are flat: white, 1px `border-border`, no heavy shadows. Services cards use `fill` to flood with brand colour on hover.
 7. **Photos** are black and white by default via `<Photo>`, turning to brand colour on hover.

@@ -197,8 +197,8 @@ export function Eyebrow({ label, accent = "indigo" }: { label: string; accent?: 
 /* ---------- CTA with arrow box (reference "cta") ---------- */
 export function ArrowBox({ className, children }: { className?: string; children?: ReactNode }) {
   return (
-    <span className={cn("grid place-items-center overflow-hidden rounded-control bg-background text-foreground", className)}>
-      {children ?? <IconArrowRight className="group-hover/cta:animate-arrow" />}
+    <span data-cta-box className={cn("grid place-items-center rounded-control bg-background text-foreground", className)}>
+      {children ?? <IconArrowRight />}
     </span>
   );
 }

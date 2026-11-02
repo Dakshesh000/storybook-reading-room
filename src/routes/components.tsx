@@ -35,7 +35,7 @@ type Entry = { id: string; name: string; desc: string; code: string; body: React
 
 const entries: Entry[] = [
   {
-    id: "button", name: "Button", desc: "Green for header and hero actions, indigo for the main call to action. Arrow slides on hover.",
+    id: "button", name: "Button", desc: "Green for header and hero actions, indigo for the main call to action. Arrow container slides from left to right on hover.",
     code: `<Button variant="indigo">Book a demo</Button>\n<Button variant="green" size="sm">Get started</Button>`,
     body: (
       <div className="flex flex-col gap-8">

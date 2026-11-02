@@ -25,6 +25,14 @@ export const buttonVariants = cva(
   },
 );
 
+/** With an arrow, the button uses the brand `cta-slide` motion: the arrow
+ * container travels from the left edge to the right edge on hover/focus. */
+const arrowSizes = {
+  sm: "cta-slide [--cta-pad:0.25rem] [--cta-box:1.75rem] [--cta-gap:0.5rem]",
+  md: "cta-slide [--cta-pad:0.3125rem] [--cta-box:2.25rem] [--cta-gap:0.75rem]",
+  lg: "cta-slide [--cta-pad:0.375rem] [--cta-box:2.75rem] [--cta-gap:1rem]",
+} as const;
+
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -42,12 +50,16 @@ export function ArrowIcon({ className }: { className?: string }) {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, arrow = true, children, type = "button", ...props }, ref) => (
-    <button ref={ref} type={type} className={cn(buttonVariants({ variant, size }), className)} {...props}>
-      {children}
-      {arrow && (
-        <span className="inline-flex overflow-hidden">
-          <ArrowIcon className="group-hover/btn:animate-arrow" />
-        </span>
+    <button ref={ref} type={type} className={cn(buttonVariants({ variant, size }), arrow && arrowSizes[size ?? "md"], className)} {...props}>
+      {arrow ? (
+        <>
+          <span data-cta-box className="grid place-items-center rounded-[calc(var(--radius-control)-2px)] bg-background/90 text-foreground">
+            <ArrowIcon />
+          </span>
+          <span data-cta-label>{children}</span>
+        </>
+      ) : (
+        children
       )}
     </button>
   ),

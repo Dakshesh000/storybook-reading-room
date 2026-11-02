@@ -20,6 +20,7 @@
   --brand-smart-blue: #4569c4;
   --brand-evergreen: #1e2810;
   --brand-parchment: #efe9e7;
+  --brand-white: #ffffff;
   --brand-emerald: #16a36a;
   --brand-amber: #e5a100;
   --brand-brick: #d2382f;
@@ -102,6 +103,7 @@
   --color-smart-blue: var(--brand-smart-blue);
   --color-evergreen: var(--brand-evergreen);
   --color-parchment: var(--brand-parchment);
+  --color-white: var(--brand-white);
   --color-emerald: var(--brand-emerald);
   --color-amber: var(--brand-amber);
   --color-brick: var(--brand-brick);
@@ -175,17 +177,42 @@
   --duration-move: 600ms;
 
   --animate-reveal: konsol-reveal 350ms cubic-bezier(0.4, 0, 0.2, 1) both;
-  --animate-arrow: konsol-arrow 600ms cubic-bezier(0.4, 0, 0.2, 1);
 
   @keyframes konsol-reveal {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes konsol-arrow {
-    0% { transform: translateX(0); opacity: 1; }
-    45% { transform: translateX(120%); opacity: 0; }
-    55% { transform: translateX(-120%); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+}
+
+/* Brand CTA motion: on hover/focus the arrow container slides from the left
+   edge to the right edge while the label shifts the other way. */
+@utility cta-slide {
+  --cta-pad: 0.375rem;
+  --cta-box: 2.75rem;
+  --cta-gap: 1rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--cta-pad) calc(var(--cta-pad) + 0.75rem) var(--cta-pad) calc(var(--cta-pad) + var(--cta-box) + var(--cta-gap)) !important;
+  & > [data-cta-box] {
+    position: absolute;
+    top: var(--cta-pad);
+    bottom: var(--cta-pad);
+    left: var(--cta-pad);
+    width: var(--cta-box);
+    transition: left var(--duration-move) var(--ease-konsol);
+  }
+  & > [data-cta-label] {
+    transition: transform var(--duration-move) var(--ease-konsol);
+  }
+  &:hover > [data-cta-box], &:focus-visible > [data-cta-box] {
+    left: calc(100% - var(--cta-pad) - var(--cta-box));
+  }
+  &:hover > [data-cta-label], &:focus-visible > [data-cta-label] {
+    transform: translateX(calc(-1 * (var(--cta-box) + var(--cta-gap) - 0.75rem)));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    & > [data-cta-box], & > [data-cta-label] { transition: none; }
   }
 }
 
