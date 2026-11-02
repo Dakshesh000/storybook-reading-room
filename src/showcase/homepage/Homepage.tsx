@@ -103,23 +103,46 @@ function Header({ dark }: { dark: boolean }) {
           onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocusIn(false); }}
           style={compact ? { width: open ? "100%" : btnW + 18 } : undefined}
           className={cn(
-            "relative ml-auto flex items-center",
+            "relative flex items-center",
             compact
-              ? cn("pointer-events-auto rounded-frame border border-border bg-background p-2 shadow-lg", motion)
-              : "flex-1 justify-between border border-transparent",
+              ? cn("pointer-events-auto mx-auto grid grid-cols-[1fr_auto_1fr] rounded-frame border border-border bg-background p-2 shadow-lg", motion)
+              : "ml-auto flex-1 justify-between border border-transparent",
           )}
         >
           {/* invisible zone so the bar opens when the cursor gets near it */}
           {compact && <span aria-hidden className="absolute -inset-10 -z-10" />}
-          <nav aria-label="Main" inert={compact && !open}
-            className={cn("overflow-hidden whitespace-nowrap", compact
-              ? cn("flex min-w-0 flex-1 gap-4 text-sm md:gap-8 md:text-base", motion, open ? "px-3 opacity-100" : "pointer-events-none px-0 opacity-0")
-              : "mx-auto hidden gap-10 md:flex")}>
-            {links.map((n) => (
-              <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
-            ))}
-          </nav>
-          {cta}
+          {compact ? (
+            <>
+              {/* Left: logo pinned left, links 1-2 hug the centred button */}
+              <div inert={!open} className={cn("relative flex min-w-0 items-center justify-end overflow-hidden whitespace-nowrap", motion, open ? "pl-12 pr-4 opacity-100 md:pr-8" : "pointer-events-none px-0 opacity-0")}>
+                <a href="#" aria-label="The Konsol home" className={cn("absolute left-1 top-1/2 -translate-y-1/2 rounded-control", ring)}>
+                  <Logo color={dark ? "white" : "black"} className="size-8" />
+                </a>
+                <nav aria-label="Main" className="flex gap-4 text-sm md:gap-8 md:text-base">
+                  {links.slice(0, 2).map((n) => (
+                    <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
+                  ))}
+                </nav>
+              </div>
+              {cta}
+              <div inert={!open} className={cn("flex min-w-0 items-center overflow-hidden whitespace-nowrap", motion, open ? "pl-4 opacity-100 md:pl-8" : "pointer-events-none px-0 opacity-0")}>
+                <nav aria-label="More" className="flex gap-4 text-sm md:gap-8 md:text-base">
+                  {links.slice(2).map((n) => (
+                    <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
+                  ))}
+                </nav>
+              </div>
+            </>
+          ) : (
+            <>
+              <nav aria-label="Main" className="mx-auto hidden gap-10 overflow-hidden whitespace-nowrap md:flex">
+                {links.map((n) => (
+                  <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
+                ))}
+              </nav>
+              {cta}
+            </>
+          )}
         </div>
       </div>
     </header>
