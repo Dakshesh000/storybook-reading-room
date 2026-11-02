@@ -68,49 +68,59 @@ function Header({ dark }: { dark: boolean }) {
   }, [tapped]);
   useEffect(() => { if (!compact) setTapped(false); }, [compact]);
   const expanded = !compact || hover || focusIn || tapped;
+  const open = compact && expanded;
+  const btnRef = useRef<HTMLAnchorElement>(null);
+  const [btnW, setBtnW] = useState(0);
+  useEffect(() => {
+    const el = btnRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setBtnW(el.offsetWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const motion = "transition-all duration-move ease-konsol motion-reduce:transition-none";
+  const links = ["About", "Services", "Insights", "Testimonials"];
+  const cta = (
+    <a ref={btnRef} href="#" className={cn("cta-slide shrink-0 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", compact ? "inline-flex" : "hidden sm:inline-flex", ring)}>
+      <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
+    </a>
+  );
   return (
-    <header className={cn("sticky top-[42px] z-50", motion, compact ? "px-3 pt-3" : "pt-0")}>
-      <div
-        ref={ref}
-        onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
-        onPointerLeave={(e) => e.pointerType === "mouse" && setHover(false)}
-        onPointerDown={(e) => { if (compact && e.pointerType !== "mouse") setTapped(true); }}
-        onFocus={() => setFocusIn(true)}
-        onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocusIn(false); }}
-        className={cn(
-          "mx-auto flex items-center justify-between border",
-          motion,
-          compact
-            ? cn("rounded-frame border-border bg-background px-2 py-2 shadow-lg", expanded ? "max-w-3xl gap-6" : "max-w-xs gap-4")
-            : "max-w-[1440px] rounded-none border-transparent bg-background px-6 py-6 gap-6",
+    <header className={cn("sticky top-[42px] z-50", compact && "pointer-events-none")}>
+      <div className={cn("mx-auto flex max-w-[1440px] items-center", motion, compact ? "px-3 pt-3" : "px-6 py-6")}>
+        {!compact && (
+          <a href="#" aria-label="The Konsol home" className={cn("flex shrink-0 items-center rounded-control", ring)}>
+            <Logo color={dark ? "white" : "black"} className="size-10" />
+            <span className="ml-3 whitespace-nowrap font-heading text-lg font-semibold max-[380px]:hidden">The Konsol</span>
+          </a>
         )}
-      >
-        <a href="#" aria-label="The Konsol home" className={cn("flex shrink-0 items-center rounded-control", ring)}>
-          <Logo color={dark ? "white" : "black"} className={cn(motion, compact ? "size-9" : "size-10")} />
-          <span aria-hidden={compact}
-            className={cn("overflow-hidden whitespace-nowrap font-heading text-lg font-semibold max-[380px]:hidden", motion,
-              compact ? "ml-0 max-w-0 opacity-0" : "ml-3 max-w-40 opacity-100")}>
-            The Konsol
-          </span>
-        </a>
-        <nav aria-label="Main" inert={compact && !expanded}
-          className={cn("hidden overflow-hidden whitespace-nowrap md:flex", motion,
-            compact ? (expanded ? "max-w-md gap-6 opacity-100" : "max-w-0 gap-0 opacity-0") : "max-w-2xl gap-10 opacity-100")}>
-          {["About", "Services", "Insights", "Testimonials"].map((n) => (
-            <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
-          ))}
-        </nav>
-        {compact && expanded && (
-          <nav aria-label="Main mobile" className="flex gap-4 overflow-x-auto whitespace-nowrap text-sm md:hidden">
-            {["About", "Services", "Insights", "Testimonials"].map((n) => (
+        <div
+          ref={ref}
+          onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
+          onPointerLeave={(e) => e.pointerType === "mouse" && setHover(false)}
+          onPointerDown={(e) => { if (compact && e.pointerType !== "mouse" && !(e.target as HTMLElement).closest("a")) setTapped(true); }}
+          onFocus={() => setFocusIn(true)}
+          onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocusIn(false); }}
+          style={compact ? { width: open ? "100%" : btnW + 18 } : undefined}
+          className={cn(
+            "relative ml-auto flex items-center",
+            compact
+              ? cn("pointer-events-auto rounded-frame border border-border bg-background p-2 shadow-lg", motion)
+              : "flex-1 justify-between border border-transparent",
+          )}
+        >
+          {/* invisible zone so the bar opens when the cursor gets near it */}
+          {compact && <span aria-hidden className="absolute -inset-10 -z-10" />}
+          <nav aria-label="Main" inert={compact && !open}
+            className={cn("overflow-hidden whitespace-nowrap", compact
+              ? cn("flex min-w-0 flex-1 gap-4 text-sm md:gap-8 md:text-base", motion, open ? "px-3 opacity-100" : "pointer-events-none px-0 opacity-0")
+              : "mx-auto hidden gap-10 md:flex")}>
+            {links.map((n) => (
               <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
             ))}
           </nav>
-        )}
-        <a href="#" className={cn("cta-slide shrink-0 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", compact && !expanded ? "inline-flex" : "hidden sm:inline-flex", ring)}>
-          <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
-        </a>
+          {cta}
+        </div>
       </div>
     </header>
   );
