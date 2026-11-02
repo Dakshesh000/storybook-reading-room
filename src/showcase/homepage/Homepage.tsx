@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
@@ -49,24 +49,69 @@ function ThemeBar({ dark, setDark }: { dark: boolean; setDark: (d: boolean) => v
 }
 
 function Header({ dark }: { dark: boolean }) {
+  const [compact, setCompact] = useState(false);
+  const [hover, setHover] = useState(false);
+  const [focusIn, setFocusIn] = useState(false);
+  const [tapped, setTapped] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const onScroll = () => setCompact(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => {
+    if (!tapped) return;
+    const close = (e: PointerEvent) => { if (!ref.current?.contains(e.target as Node)) setTapped(false); };
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
+  }, [tapped]);
+  useEffect(() => { if (!compact) setTapped(false); }, [compact]);
+  const expanded = !compact || hover || focusIn || tapped;
+  const motion = "transition-all duration-move ease-konsol motion-reduce:transition-none";
   return (
-    <header className="relative z-50">
-      <div className={cn(wrap, "flex items-center justify-between px-6 py-6")}>
-        <a href="#" aria-label="The Konsol home" className={cn("rounded-control", ring)}>
-          <Logo color={dark ? "white" : "black"} className="size-10" />
+    <header className={cn("sticky top-[42px] z-50", motion, compact ? "px-3 pt-3" : "pt-0")}>
+      <div
+        ref={ref}
+        onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
+        onPointerLeave={(e) => e.pointerType === "mouse" && setHover(false)}
+        onPointerDown={(e) => { if (compact && e.pointerType !== "mouse") setTapped(true); }}
+        onFocus={() => setFocusIn(true)}
+        onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocusIn(false); }}
+        className={cn(
+          "mx-auto flex items-center justify-between border",
+          motion,
+          compact
+            ? cn("rounded-frame border-border bg-background px-2 py-2 shadow-lg", expanded ? "max-w-3xl gap-6" : "max-w-xs gap-4")
+            : "max-w-[1440px] rounded-none border-transparent bg-background px-6 py-6 gap-6",
+        )}
+      >
+        <a href="#" aria-label="The Konsol home" className={cn("flex shrink-0 items-center rounded-control", ring)}>
+          <Logo color={dark ? "white" : "black"} className={cn(motion, compact ? "size-9" : "size-10")} />
+          <span aria-hidden={compact}
+            className={cn("overflow-hidden whitespace-nowrap font-heading text-lg font-semibold max-[380px]:hidden", motion,
+              compact ? "ml-0 max-w-0 opacity-0" : "ml-3 max-w-40 opacity-100")}>
+            The Konsol
+          </span>
         </a>
-        <nav aria-label="Main" className="hidden gap-10 md:flex">
+        <nav aria-label="Main" inert={compact && !expanded}
+          className={cn("hidden overflow-hidden whitespace-nowrap md:flex", motion,
+            compact ? (expanded ? "max-w-md gap-6 opacity-100" : "max-w-0 gap-0 opacity-0") : "max-w-2xl gap-10 opacity-100")}>
           {["About", "Services", "Insights", "Testimonials"].map((n) => (
             <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
-          <a href="#" className={cn("cta-slide hidden rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem] sm:inline-flex", ring)}>
-            <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
-          </a>
-        </div>
+        {compact && expanded && (
+          <nav aria-label="Main mobile" className="flex gap-4 overflow-x-auto whitespace-nowrap text-sm md:hidden">
+            {["About", "Services", "Insights", "Testimonials"].map((n) => (
+              <a key={n} href="#" className={cn("rounded-[4px] hover:underline underline-offset-4", ring)}>{n}</a>
+            ))}
+          </nav>
+        )}
+        <a href="#" className={cn("cta-slide shrink-0 rounded-control bg-indigo text-white border border-indigo hover:text-black focus-visible:text-black transition-colors duration-move hover:bg-yellow-green focus-visible:bg-yellow-green [--cta-box:2.75rem] [--cta-gap:1rem]", compact && !expanded ? "inline-flex" : "hidden sm:inline-flex", ring)}>
+          <ArrowBox className="h-9" /><span data-cta-label className="leading-9">Get Started</span>
+        </a>
       </div>
-
     </header>
   );
 }
