@@ -4,7 +4,7 @@ import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
 import { AgentStack } from "./AgentStack";
-import GlyphPortal from "./GlyphPortal";
+import { interior } from "./GlyphPortal";
 import {
   ArrowBox, BwImg, ClientGlyph, Eyebrow, IconArrowLeft, IconArrowRight, IconArrowUpRight, IconChart, IconChevron,
   IconChevronRight, IconDots, IconLinkedIn, IconPlay, IconX, IconYouTube, InkReveal, Reveal,
@@ -233,11 +233,77 @@ function LogoRotator() {
   );
 }
 
-function Hero() {
+/**
+ * "Theme Change" (dark to light): the real MARKETING headline holds still while the
+ * green box scrolls beneath it, then the camera zooms into the top of its "K".
+ */
+function Hero({ onLight }: { onLight: (light: boolean) => void }) {
+  const h1 = useRef<HTMLHeadingElement>(null);
+  const k = useRef<HTMLSpanElement>(null);
+  const box = useRef<HTMLDivElement>(null);
+  const spacer = useRef<HTMLDivElement>(null);
+  const cb = useRef(onLight);
+  cb.current = onLight;
+  useEffect(() => {
+    const el = h1.current!, kEl = k.current!, boxEl = box.current!, sp = spacer.current!;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let phase1 = 0, zoom = 1, origin = { x: 0, y: 0 }, top0 = 0, left0 = 0, maxScale = 1, raf = 0;
+    const measure = () => {
+      el.style.transform = "";
+      const vh = window.innerHeight, vw = window.innerWidth;
+      zoom = vh * 1.3;
+      sp.style.height = reduce.matches ? "0px" : `${zoom}px`;
+      const r = el.getBoundingClientRect(), kr = kEl.getBoundingClientRect(), br = boxEl.getBoundingClientRect();
+      top0 = r.top + window.scrollY; left0 = r.left;
+      phase1 = Math.max(0, br.bottom - r.top);
+      const cs = getComputedStyle(kEl), fs = parseFloat(cs.fontSize);
+      const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+      let px = kr.left + kr.width * 0.2, py = kr.top + kr.height * 0.35, rad = kr.width * 0.08;
+      if (ctx) {
+        ctx.font = `${cs.fontWeight} 100px ${cs.fontFamily}`;
+        const fAsc = ctx.measureText("K").fontBoundingBoxAscent;
+        const ink = interior(ctx, "K", `${cs.fontWeight} 300px ${cs.fontFamily}`, true);
+        if (ink && fAsc) {
+          const u = fs / 100, baseline = kr.top + fAsc * u;
+          px = kr.left + ink.x * u; py = baseline + ink.y * u; rad = ink.radius * u;
+        }
+      }
+      origin = { x: px - r.left, y: py - r.top };
+      maxScale = Math.max(1, Math.hypot(vw, vh) / Math.max(1, rad));
+    };
+    const frame = () => {
+      raf = 0;
+      const y = window.scrollY;
+      if (reduce.matches) { el.style.transform = ""; cb.current(y > top0 + phase1); return; }
+      const hold = Math.min(Math.max(y, 0), phase1 + zoom);
+      const tz = Math.min(Math.max((hold - phase1) / zoom, 0), 1);
+      const e = tz * tz * (3 - 2 * tz);
+      const s = Math.pow(maxScale, e);
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const baseTop = top0 - y + hold; // viewport top of the held headline
+      const dx = (vw / 2 - (left0 + origin.x)) * e;
+      const dy = (vh / 2 - (baseTop + origin.y)) * e;
+      el.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+      el.style.transform = `translate3d(${dx}px, ${hold + dy}px, 0) scale(${s})`;
+      el.style.opacity = tz >= 1 ? "0" : "1";
+      cb.current(tz >= 0.9);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
+    const onResize = () => { measure(); frame(); };
+    measure(); frame();
+    document.fonts.ready.then(onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
   return (
     <section className={wrap}>
-      <h1 className={cn(t.display, "mt-[28px] px-6 text-center leading-[0.78]")}>MARKETING</h1>
-      <div className="relative mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
+      <h1 ref={h1} className={cn(t.display, "relative z-30 mt-[28px] px-6 text-center leading-[0.78] will-change-transform")}>MAR<span ref={k}>K</span>ETING</h1>
+      <div ref={box} className="relative z-10 mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
         <img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
         <div className="relative z-20 max-w-md">
           <Reveal>
@@ -264,6 +330,7 @@ function Hero() {
           <LogoRotator />
         </div>
       </div>
+      <div ref={spacer} aria-hidden="true" />
     </section>
   );
 }
@@ -688,30 +755,6 @@ function Footer() {
   );
 }
 
-/** "Theme Change" portal: zooms through the top of the K in MARKETING into the light site. */
-function Portal({ onProgress, children }: { onProgress: (p: number) => void; children: ReactNode }) {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    let live = true;
-    const done = () => live && setReady(true);
-    const timer = window.setTimeout(done, 1600);
-    document.fonts.load('700 100px "Inter"').then(done, done);
-    return () => { live = false; clearTimeout(timer); };
-  }, []);
-  if (!ready) return <div className="h-svh" />;
-  return (
-    <GlyphPortal
-      word="MARKETING" focusChar="K" focusAnchor="top" direction="in" interactive={false} scrollLength={2.2}
-      fontFamily='"Inter", Arial, sans-serif' fontWeight={700} enterLabel="Scroll" onProgress={onProgress}
-      className="[&_[data-gp-caption]]:font-mono [&_[data-gp-caption]]:uppercase [&_[data-gp-caption]]:tracking-label [&_[data-gp-content]]:!p-0 [&_[data-gp-content]]:!block [&_[data-gp-content]]:text-foreground"
-      style={{ "--gp-paper": "var(--background)", "--gp-ink": "var(--foreground)", "--gp-field": "var(--brand-white)", "--gp-foreground": "var(--brand-black)" }}
-      background={<div className="absolute inset-0 bg-white" />}
-    >
-      {children}
-    </GlyphPortal>
-  );
-}
-
 export function Homepage() {
   // Single dark version of the website; the light version is archived.
   // The page starts dark; the portal "Theme Change" after the hero turns it light.
@@ -726,8 +769,8 @@ export function Homepage() {
       <ThemeBar />
       <main>
         <Header />
-        <Hero />
-        <div className="mt-6"><Portal onProgress={(p) => setLight(p >= 0.85)}><Intro /></Portal></div>
+        <Hero onLight={setLight} />
+        <Intro />
         <BluePanel />
         <Services />
         <About />
