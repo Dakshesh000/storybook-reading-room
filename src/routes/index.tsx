@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
 
 const pages = [
   { to: "/colors", title: "Colours", body: "Brand palette, light and dark roles, section colours, buttons and status." },
-  { to: "/typography", title: "Typography", body: "Inter Tight for everything, JetBrains Mono for small labels." },
+  { to: "/typography", title: "Typography", body: "Inter display, Space Grotesk headings, Roboto body." },
   { to: "/logos", title: "Logos", body: "Official black and white logos for light and dark surfaces." },
   { to: "/components", title: "Components", body: "Every building block, live, with variants and code." },
 ] as const;
@@ -29,7 +29,7 @@ function Overview() {
       <Container className="flex flex-col gap-6 py-10">
         <Section tone="green" className="animate-reveal">
           <MonoLabel>Design system · v0.1</MonoLabel>
-          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[1.02] tracking-tight md:text-7xl">
+          <h1 className="mt-4 max-w-4xl font-display text-5xl font-bold leading-[1.02] tracking-tight md:text-7xl">
             Bold, clean and <Highlight className="bg-btn-green-pressed">confident</Highlight> by default.
           </h1>
           <SectionMuted className="mt-6 max-w-2xl text-lg">

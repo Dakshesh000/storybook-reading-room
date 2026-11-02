@@ -3,8 +3,8 @@
 The Konsol is a B2B marketing agency (brand revamps, websites, AI powered outbound for growing service businesses). Everything should feel **bold, clean and confident**: mostly white and black, with big blocks of brand colour that change section to section — a pop-art rhythm of one colour per section.
 
 ## Setup
-- Import the theme stylesheet (`styles.css` from this library) once at the app root. It contains every token as CSS variables plus the Tailwind v4 `@theme inline` mapping.
-- Load fonts with a `<link>`: Inter Tight (400/500/600/700) and JetBrains Mono (400/500) from Google Fonts.
+- Importing anything from the library loads its stylesheet (`styles.css`) automatically. It contains every token as CSS variables plus the Tailwind v4 `@theme inline` mapping.
+- Fonts are bundled: the library entry imports the stylesheet, which self-hosts Inter, Space Grotesk, Roboto and Roboto Mono. No `<link>` tags needed.
 - Dark mode is class-based: add `.dark` to `<html>`. Build light mode first.
 - Import components from the barrel: `import { Button, Section } from "@/design-system/konsol"`.
 
@@ -35,5 +35,5 @@ Plain, direct, confident. Short sentences. Talk about outcomes ("Book a demo", "
 
 ## Don't
 - No gradients, glassmorphism or drop shadows.
-- No extra fonts.
+- No extra fonts. Display = `font-display font-bold` (Inter 700), headings = `font-heading` (Space Grotesk 600, applied to h1–h6 by default), body/UI = `font-sans` (Roboto), labels = `font-mono` (Roboto Mono).
 - No raw colour values or inline styles.

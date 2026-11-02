@@ -1,0 +1,2 @@
+- [x] Switch fonts: Inter Bold display, Space Grotesk 600 headings, Roboto body, Roboto Mono labels
+- [x] Keep the 4 logo files

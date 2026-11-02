@@ -1,3 +1,4 @@
+import "./styles.css";
 export * from "./components/konsol/button";
 export * from "./components/konsol/layout";
 export * from "./components/konsol/card";

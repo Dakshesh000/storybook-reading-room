@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export interface MonoLabelProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
-/** Small uppercase JetBrains Mono label (12px, 0.06em tracking). */
+/** Small uppercase Roboto Mono label (12px, 0.06em tracking). */
 export const MonoLabel = React.forwardRef<HTMLSpanElement, MonoLabelProps>(({ className, ...props }, ref) => (
   <span ref={ref} className={cn("font-mono text-xs uppercase tracking-label", className)} {...props} />
 ));

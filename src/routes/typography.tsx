@@ -6,7 +6,7 @@ export const Route = createFileRoute("/typography")({
   head: () => ({
     meta: [
       { title: "Typography · The Konsol Design System" },
-      { name: "description", content: "Inter Tight and JetBrains Mono type scale for The Konsol." },
+      { name: "description", content: "Inter, Space Grotesk and Roboto type scale for The Konsol." },
       { property: "og:title", content: "Typography · The Konsol Design System" },
       { property: "og:description", content: "Fonts and type scale for The Konsol." },
       { property: "og:type", content: "website" },
@@ -17,13 +17,13 @@ export const Route = createFileRoute("/typography")({
 });
 
 const scale = [
-  ["Display", "text-7xl font-semibold tracking-tight leading-[1.02]", "Growth, on brand."],
-  ["H1", "text-6xl font-semibold tracking-tight", "Websites that book meetings"],
-  ["H2", "text-5xl font-semibold tracking-tight", "Brand revamps for service firms"],
-  ["H3", "text-3xl font-semibold tracking-tight", "AI powered outbound"],
-  ["H4", "text-2xl font-semibold", "What our clients say"],
-  ["H5", "text-xl font-semibold", "Pricing that scales with you"],
-  ["H6", "text-lg font-semibold", "Frequently asked questions"],
+  ["Display", "font-display text-7xl font-bold tracking-tight leading-[1.02]", "Growth, on brand."],
+  ["H1", "font-heading text-6xl font-semibold tracking-tight", "Websites that book meetings"],
+  ["H2", "font-heading text-5xl font-semibold tracking-tight", "Brand revamps for service firms"],
+  ["H3", "font-heading text-3xl font-semibold tracking-tight", "AI powered outbound"],
+  ["H4", "font-heading text-2xl font-semibold", "What our clients say"],
+  ["H5", "font-heading text-xl font-semibold", "Pricing that scales with you"],
+  ["H6", "font-heading text-lg font-semibold", "Frequently asked questions"],
   ["Body large", "text-lg text-foreground-secondary", "We help growing service businesses look the part and fill their calendar."],
   ["Body", "text-base", "Most clients see their first booked call within three weeks of launch."],
   ["Caption", "text-sm text-muted-foreground", "Results from 42 campaigns run in 2026."],
@@ -32,16 +32,17 @@ const scale = [
 function Typography() {
   return (
     <Shell>
-      <PageHeader eyebrow="Foundations" title="Typography" intro="One family for everything, plus a monospace for small labels." />
-      <Container className="grid gap-6 pb-12 md:grid-cols-2">
-        <div className="rounded-card border border-border p-6">
-          <p className="text-4xl font-semibold">Inter Tight</p>
-          <Caption>font-sans · 400, 500, 600, 700 · headings and body</Caption>
-        </div>
-        <div className="rounded-card border border-border p-6">
-          <p className="font-mono text-2xl">JetBrains Mono</p>
-          <Caption>font-mono · 400, 500 · 12px uppercase labels, 0.06em</Caption>
-        </div>
+      <PageHeader eyebrow="Foundations" title="Typography" intro="Inter Bold for display, Space Grotesk for headings, Roboto for everything else." />
+      <Container className="grid gap-6 pb-12 md:grid-cols-2 lg:grid-cols-4">
+        {([["font-display font-bold", "Inter", "font-display · 700 · display headlines"],
+          ["font-heading font-semibold", "Space Grotesk", "font-heading · 500, 600, 700 · headings H1–H6"],
+          ["font-sans", "Roboto", "font-sans · 400, 500, 700 · body, buttons, forms"],
+          ["font-mono", "Roboto Mono", "font-mono · 400, 500 · 12px uppercase labels"]] as const).map(([c, n, d]) => (
+          <div key={n} className="rounded-card border border-border p-6 flex flex-col gap-2">
+            <p className={`${c} text-3xl`}>{n}</p>
+            <Caption>{d}</Caption>
+          </div>
+        ))}
       </Container>
       <Container className="flex flex-col divide-y divide-border pb-16">
         {scale.map(([name, cls, text]) => (
