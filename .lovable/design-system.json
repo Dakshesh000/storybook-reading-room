@@ -1,0 +1,936 @@
+{
+  "meta": {
+    "name": "The Reading Room",
+    "package": "@ws-4sddodtigjmokx0gbl7o/56c358bb-165b-4796-98f3-75c2f9ea769b",
+    "version": "1.0.0",
+    "framework": "react",
+    "css_framework": "tailwind",
+    "starter_template": "custom_design_system",
+    "theme_files": [
+      "src/styles.css"
+    ],
+    "source_type": "local",
+    "source_manifest": {
+      "#enrichment": "4d9d438d2a0fef5b44f4cea0348fd06da0a1340a3559af267d50b6c08c8e0f60",
+      ".dsignore": "2c7d76468c15bc0f1499420154f01ae3",
+      ".gitignore": "6059213806e442947666752f3db6bfdc",
+      ".lovable/meta.yaml": "8ec7245def9c0ef39976dd2bc212ff0a",
+      ".lovable/plan/agent-card-stack-redesign-2026-11-02.md": "41794a715e12585ec56ac4e09f01b684",
+      ".lovable/plan/agent-card-stack-taller-card-left-aligned-avatars-no-auto-sw-2026-11-02.md": "a2d20c7bfdad31be5870030a2b027a36",
+      ".lovable/plan/centred-floating-header-bar-2026-11-02.md": "ad6c410c53c230d1914ad2966cce5a30",
+      ".lovable/plan/clear-column-1-of-the-blue-panel-2026-11-02.md": "c5aae65a10d06270e1c630d7365b4b69",
+      ".lovable/plan/fix-blank-colour-swatches-on-the-colours-page-2026-11-02.md": "78035897bbd7dd5ee52900fef9411b76",
+      ".lovable/plan/fix-the-space-above-built-for-real-world-ai-after-the-zoom-2026-11-03.md": "ac6d282eaa76f43c03e3d57ea11955aa",
+      ".lovable/plan/floating-header-button-only-expands-leftward-on-approach-2026-11-02.md": "7e125ab7305df466d2342bdf2c57e63b",
+      ".lovable/plan/homepage-from-the-reference-file-2026-11-02.md": "7942c67d7a3f7a52ccdf53ab8cce7b82",
+      ".lovable/plan/homepage-header-scroll-to-floating-menu-2026-11-02.md": "ca041ab3a02b76a19e2851548a788a3c",
+      ".lovable/plan/homepage-on-and-the-design-system-under-brand-2026-11-03.md": "8f9baea96e44decb1a10d3a8d576c389",
+      ".lovable/plan/make-the-brand-styles-and-fonts-travel-with-the-design-syste-2026-11-02.md": "393aa53e7e83bafb6b01e937e817d3a1",
+      ".lovable/plan/make-the-homepage-dark-only-and-archive-the-light-version-2026-11-02.md": "e7005973cb5ce0433cad070e331cabb4",
+      ".lovable/plan/portal-theme-change-hero-marketing-to-light-site-2026-11-02.md": "4762e2c6bd5056af1461566605540369",
+      ".lovable/plan/portal-zoom-from-the-real-marketing-headline-2026-11-02.md": "1bb5f5721790885d7907b28e10bf04e9",
+      ".lovable/plan/rebuild-the-marketing-portal-zoom-2026-11-03.md": "2c55ba009c310074717883192c5c3cb6",
+      ".lovable/plan/responsive-floating-header-uncropped-logo-2026-11-02.md": "c1586695298b62cf8961ccab5c7c6e16",
+      ".lovable/plan/the-konsol-design-system-first-draft-2026-11-02.md": "62512139c0e14cf74c01f8fb86cdaa30",
+      ".lovable/plan/theme-change-light-to-dark-at-case-studies-reverse-portal-2026-11-03.md": "16a887de180cbe2b02e1669721939ec0",
+      ".lovable/plan/two-cta-buttons-and-the-marketing-heading-2026-11-02.md": "eff0b91f7e085c87fe4339cb4cd68903",
+      ".lovable/sources.yaml": "d60f4c15e1261caabb4a28841c7246e9",
+      ".lovable/system.md": "ca4542bd9fea69c878042643c18c2670",
+      "AGENTS.md": "9360ff7f7af802ef34b678fb96e9ab82",
+      "README.md": "d19675c449605f23c7cfa133c69b398b",
+      "bunfig.toml": "25f4c8696b22b0943db7191e0cdf7942",
+      "eslint.config.js": "07a67437fb1a45ab36d6de0145ff09de",
+      "lovable.toml": "9636c1bf32f9901bfba4eabb92981217",
+      "mockupPreviewPlugin.ts": "331c56b72ab88e9510bdaf1f21f2370e",
+      "package.json": "56a2c6efa386ca527f836feb52faea16",
+      "public/favicon.png": "997ffec7be9e8733df2205e14e0d7601",
+      "roadmap.md": "1ba84234e4323c93c84847b281dec3a4",
+      "src/assets/fonts/inter-latin-700-normal.woff2": "8ca0a51552960933d0fd52c19175cbe9",
+      "src/assets/fonts/roboto-latin-400-normal.woff2": "4279528ce0e7dc28919e6f8ce5f0eaa5",
+      "src/assets/fonts/roboto-latin-500-normal.woff2": "55cfeb5304f00ff33469dc76a3b30758",
+      "src/assets/fonts/roboto-latin-700-normal.woff2": "10a07810f28f8ff9a071a88dc2255bbb",
+      "src/assets/fonts/roboto-mono-latin-400-normal.woff2": "a06583dfa488e45b0f0f661257cbee86",
+      "src/assets/fonts/roboto-mono-latin-500-normal.woff2": "9865f1cbca09372c5a6db2ef275aa29e",
+      "src/assets/fonts/space-grotesk-latin-500-normal.woff2": "ab4861869c91f3c339f3a9f0a0d5a0b5",
+      "src/assets/fonts/space-grotesk-latin-600-normal.woff2": "49f2dd2d21322ac241e5c9b34da2121e",
+      "src/assets/fonts/space-grotesk-latin-700-normal.woff2": "f9e147a59a9381b7db65941ceac88e52",
+      "src/assets/logos/The_Konsol_Logo_Black_Solid.webp": "bdce64226016867240c4bfe23558295b",
+      "src/assets/logos/The_Konsol_Logo_Black_Transparent.webp": "9d38cd90e127a74571606d73c6bf65a0",
+      "src/assets/logos/The_Konsol_Logo_White_Solid.webp": "d825720395dcbbdc19f65a0bb3d04bca",
+      "src/assets/logos/The_Konsol_Logo_White_Transparent.webp": "71cc19d2297363b50042156145766a1c",
+      "src/assets/photography/agents/atlas.jpg": "6640953ca86ad8a5253ac05774a0a7e1",
+      "src/assets/photography/agents/echo.jpg": "0331eaf68f109f3535ca8080ae8c0bd6",
+      "src/assets/photography/agents/nova.jpg": "e88b16b8aa8c8671e0928a8012444569",
+      "src/assets/photography/agents/sage.jpg": "9bebf08be6d2bd740eb355fe754f2c68",
+      "src/components/konsol/accordion.tsx": "692d588b6a8141006fae2cb9d544882e",
+      "src/components/konsol/alert.tsx": "d6d358b72040ac0e99cd11b5c50c1f35",
+      "src/components/konsol/avatar.tsx": "c0db6fb2294596b7298aa9a380081fc3",
+      "src/components/konsol/button.tsx": "d9ed5bd5736a89de49a983564a302b64",
+      "src/components/konsol/card.tsx": "fa13c59c5938904a18bfc10599072661",
+      "src/components/konsol/form.tsx": "29155176dfb5055fe797b90df46e01fd",
+      "src/components/konsol/layout.tsx": "7355250c768a16c2b8321bab96de52a6",
+      "src/components/konsol/media.tsx": "d4ae39e07e4bbb69eaa86becf6dacee1",
+      "src/components/konsol/text.tsx": "3fbb25584161cdddda2e19bb40e080d4",
+      "src/index.ts": "dac41bf4d9bfc17913a6f4ec22b4e9b2",
+      "src/lib/utils.ts": "d9837f38cc05303254571985e3164050",
+      "src/mockup-preview.d.ts": "ae9d81e2b8514e13fd59b5b6bece9a64",
+      "src/routeTree.gen.ts": "5d9a6f7f9f15b8e5eba9f2a5b0d6f44f",
+      "src/router.tsx": "8f905e713b0eba7fa8148b7995a708c9",
+      "src/routes/[__component].preview.$.tsx": "e63e4b151fa738d36cb24710d2dbea18",
+      "src/routes/[__mockup].preview.$.tsx": "bc9ea23fc46521b323ef461c9e77ff48",
+      "src/routes/__root.tsx": "64941bf57afe645459912540d71fa0f5",
+      "src/routes/brand.colours.tsx": "fccffc96bc2c26d9bf0985a5c07e7962",
+      "src/routes/brand.components.tsx": "87006a507d29569c62dc3bd510e985ad",
+      "src/routes/brand.index.tsx": "7fe37e6bee873e8ec11794f7e731f26a",
+      "src/routes/brand.logos.tsx": "d277985309d1cd1c48f8243aecbaf4f5",
+      "src/routes/brand.tsx": "3b39332d39c187e2d4a3d0b70708d197",
+      "src/routes/brand.typography.tsx": "47808b02758a370f15895b30f2eacaec",
+      "src/routes/colors.tsx": "a7d7472147663077a38c766bec59c4d1",
+      "src/routes/components.tsx": "bbbecddb849d92e26d64c076d0383182",
+      "src/routes/homepage.tsx": "9542504d56b5bbc7d7d4add8dbc016e1",
+      "src/routes/index.tsx": "cc710607c55830aaef7fcd4db59cc2a1",
+      "src/routes/logos.tsx": "b9c8b5e5b44ab1f653ae60f00545209e",
+      "src/routes/typography.tsx": "a09e6e365585f934af50a83f5dbcf898",
+      "src/showcase/Shell.tsx": "22ed6d2a88bfb9bd01a9da992c060019",
+      "src/showcase/archive/homepage-light-2026-11-02/AgentStack.tsx": "a1d1ddce0509e5ca5fb8c37f68210e33",
+      "src/showcase/archive/homepage-light-2026-11-02/Homepage.tsx": "3d8c3f509943e9a5f43a5eb195fe2d1c",
+      "src/showcase/archive/homepage-light-2026-11-02/README.md": "a7d67b37a11cab0aaf483cc0a450ca88",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/ai-core.webp.asset.json": "59c2d6dc802b2a13fed4bfd22c9e54a7",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/client-phone.webp.asset.json": "ece85205153927be6c49e35780fef07b",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/cofounders.webp.asset.json": "63d120c29b001964625a972099a1cb80",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/flower.webp.asset.json": "a2a3ed565316c61ec36c258403fd251f",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/glass-towers.webp.asset.json": "50a8ff254e60a87be4b322a1fc246a8d",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/gtm-figure.png.asset.json": "8c3172b19caba0e091be650a832fa186",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-agent-color.webp.asset.json": "a5d5feb1c1921f6ef73d543fde79e51d",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-agent.webp.asset.json": "3e5d022c40d5b8ba085971534d5da610",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-content-color.webp.asset.json": "cc0dee8bf8400ade5fdc9859b6a38edc",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-content.webp.asset.json": "986a448a5933cd586e0b25fd6e0e92cf",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-crm-color.webp.asset.json": "f748e2de8ad3d5a08c4b5d30527c6164",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-crm.webp.asset.json": "6807a15a984c7d6e4857b351fe608e0f",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-process-color.webp.asset.json": "51dffe4c6ec73ee4f711acf56a293add",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-process.webp.asset.json": "499fb64b8546a9c2213489e96f13dbba",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-strategy-color.webp.asset.json": "4cd6ef3e6194e244ad0f4130d7df01ab",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/illu-strategy.webp.asset.json": "44fb3943bed6259be1e65e8a995ed6db",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/interlock-lead.webp.asset.json": "28e7344d4e3d7e67f6ca3e500dc95622",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/marcus-bell.webp.asset.json": "71407bdbd6f7dac1218002b3d5d87239",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/priya-shah.webp.asset.json": "da21954c135dbdda366d1e4d5cc5c5ec",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/support-specialist.webp.asset.json": "8a102d47905d8320984afaa96eae7a58",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/team-dashboard.webp.asset.json": "dc27675911d5289a4e5d13ad4418568f",
+      "src/showcase/archive/homepage-light-2026-11-02/assets/team-laughing.webp.asset.json": "146be0063f34fa278861a4a63db4c243",
+      "src/showcase/archive/homepage-light-2026-11-02/images.ts": "44f0b748dac946d4180e76c57d5e6023",
+      "src/showcase/archive/homepage-light-2026-11-02/parts.tsx": "9e8c01d23c2a4a35a5a00382192349c4",
+      "src/showcase/homepage/AgentStack.tsx": "a1d1ddce0509e5ca5fb8c37f68210e33",
+      "src/showcase/homepage/GlyphPortal.tsx": "f4ad947bddb10cbf1230fc268360070c",
+      "src/showcase/homepage/Homepage.tsx": "3fdb361e7a03d2086d2562414a33ab57",
+      "src/showcase/homepage/assets/ai-core.webp.asset.json": "59c2d6dc802b2a13fed4bfd22c9e54a7",
+      "src/showcase/homepage/assets/client-phone.webp.asset.json": "ece85205153927be6c49e35780fef07b",
+      "src/showcase/homepage/assets/cofounders.webp.asset.json": "63d120c29b001964625a972099a1cb80",
+      "src/showcase/homepage/assets/flower.webp.asset.json": "a2a3ed565316c61ec36c258403fd251f",
+      "src/showcase/homepage/assets/glass-towers.webp.asset.json": "50a8ff254e60a87be4b322a1fc246a8d",
+      "src/showcase/homepage/assets/gtm-figure.png.asset.json": "8c3172b19caba0e091be650a832fa186",
+      "src/showcase/homepage/assets/illu-agent-color.webp.asset.json": "a5d5feb1c1921f6ef73d543fde79e51d",
+      "src/showcase/homepage/assets/illu-agent.webp.asset.json": "3e5d022c40d5b8ba085971534d5da610",
+      "src/showcase/homepage/assets/illu-content-color.webp.asset.json": "cc0dee8bf8400ade5fdc9859b6a38edc",
+      "src/showcase/homepage/assets/illu-content.webp.asset.json": "986a448a5933cd586e0b25fd6e0e92cf",
+      "src/showcase/homepage/assets/illu-crm-color.webp.asset.json": "f748e2de8ad3d5a08c4b5d30527c6164",
+      "src/showcase/homepage/assets/illu-crm.webp.asset.json": "6807a15a984c7d6e4857b351fe608e0f",
+      "src/showcase/homepage/assets/illu-process-color.webp.asset.json": "51dffe4c6ec73ee4f711acf56a293add",
+      "src/showcase/homepage/assets/illu-process.webp.asset.json": "499fb64b8546a9c2213489e96f13dbba",
+      "src/showcase/homepage/assets/illu-strategy-color.webp.asset.json": "4cd6ef3e6194e244ad0f4130d7df01ab",
+      "src/showcase/homepage/assets/illu-strategy.webp.asset.json": "44fb3943bed6259be1e65e8a995ed6db",
+      "src/showcase/homepage/assets/interlock-lead.webp.asset.json": "28e7344d4e3d7e67f6ca3e500dc95622",
+      "src/showcase/homepage/assets/marcus-bell.webp.asset.json": "71407bdbd6f7dac1218002b3d5d87239",
+      "src/showcase/homepage/assets/priya-shah.webp.asset.json": "da21954c135dbdda366d1e4d5cc5c5ec",
+      "src/showcase/homepage/assets/support-specialist.webp.asset.json": "8a102d47905d8320984afaa96eae7a58",
+      "src/showcase/homepage/assets/team-dashboard.webp.asset.json": "dc27675911d5289a4e5d13ad4418568f",
+      "src/showcase/homepage/assets/team-laughing.webp.asset.json": "146be0063f34fa278861a4a63db4c243",
+      "src/showcase/homepage/images.ts": "44f0b748dac946d4180e76c57d5e6023",
+      "src/showcase/homepage/parts.tsx": "9e8c01d23c2a4a35a5a00382192349c4",
+      "src/styles.css": "346e6f3b3a07ce19bf0628e28936139a",
+      "tsconfig.json": "994abf64c2b9f78b568879f80ed0170e",
+      "vite.config.ts": "4204c29f89ddd94724628580397fcb9b",
+      "wrangler.jsonc": "680b897d48e44bcc65fe437c29b38f3b"
+    },
+    "pipeline_version": 8
+  },
+  "tokens": {
+    "color": [
+      {
+        "name": "--brand-yellow-green",
+        "raw": "#98c74f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-indigo",
+        "raw": "#363bd3",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-smart-blue",
+        "raw": "#4569c4",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-evergreen",
+        "raw": "#1e2810",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-parchment",
+        "raw": "#efe9e7",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-white",
+        "raw": "#ffffff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-black",
+        "raw": "#000000",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-emerald",
+        "raw": "#16a36a",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-amber",
+        "raw": "#e5a100",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--brand-brick",
+        "raw": "#d2382f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--background",
+        "raw": "#ffffff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--background-alt",
+        "raw": "#efe9e7",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--card",
+        "raw": "#ffffff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--foreground",
+        "raw": "#1e2810",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--foreground-secondary",
+        "raw": "#3b3735",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--muted-foreground",
+        "raw": "#68625f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--link",
+        "raw": "#363bd3",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--border",
+        "raw": "#dfd7d4",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--input",
+        "raw": "#68625f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--ring",
+        "raw": "#363bd3",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--highlight",
+        "raw": "#c5e69b",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-green",
+        "raw": "#98c74f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-green-foreground",
+        "raw": "#1e2810",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-green-muted",
+        "raw": "#2f4600",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-blue",
+        "raw": "#4569c4",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-blue-foreground",
+        "raw": "#ffffff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-blue-muted",
+        "raw": "#ecf1fc",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-indigo",
+        "raw": "#363bd3",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-indigo-foreground",
+        "raw": "#ffffff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-indigo-muted",
+        "raw": "#d8e1ff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-evergreen",
+        "raw": "#1e2810",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-evergreen-foreground",
+        "raw": "#efe9e7",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--section-evergreen-muted",
+        "raw": "#c5e69b",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-green",
+        "raw": "#98c74f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-green-hover",
+        "raw": "#c5e69b",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-green-pressed",
+        "raw": "#e9f5dd",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-green-foreground",
+        "raw": "#1e2810",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-indigo",
+        "raw": "#363bd3",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-indigo-hover",
+        "raw": "#2422a2",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-indigo-pressed",
+        "raw": "#141468",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-indigo-foreground",
+        "raw": "#ffffff",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-disabled",
+        "raw": "#efe9e7",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--btn-disabled-foreground",
+        "raw": "#a79f9d",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--success-bg",
+        "raw": "#ecf6f0",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--success-fg",
+        "raw": "#016e45",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--success-border",
+        "raw": "#16a36a",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--warning-bg",
+        "raw": "#fbf5ea",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--warning-fg",
+        "raw": "#4d3300",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--warning-border",
+        "raw": "#956800",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--error-bg",
+        "raw": "#ffedeb",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--error-fg",
+        "raw": "#991613",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--error-border",
+        "raw": "#d2382f",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--info-bg",
+        "raw": "#ecf1fc",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--info-fg",
+        "raw": "#2b4892",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--info-border",
+        "raw": "#4569c4",
+        "source": "src/styles.css"
+      }
+    ],
+    "spacing": [
+      {
+        "name": "--cta-gap",
+        "raw": "1rem",
+        "source": "src/styles.css"
+      }
+    ],
+    "typography": [
+      {
+        "name": "--font-sans",
+        "raw": "\"Roboto\", ui-sans-serif, system-ui, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-heading",
+        "raw": "\"Space Grotesk\", ui-sans-serif, system-ui, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-display",
+        "raw": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--font-mono",
+        "raw": "\"Roboto Mono\", ui-monospace, monospace",
+        "source": "src/styles.css"
+      }
+    ],
+    "radius": [
+      {
+        "name": "--radius-control",
+        "raw": "8px",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-card",
+        "raw": "12px",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-frame",
+        "raw": "16px",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-section",
+        "raw": "32px",
+        "source": "src/styles.css"
+      }
+    ],
+    "other": [
+      {
+        "name": "--container-content",
+        "raw": "1280px",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--tracking-label",
+        "raw": "0.06em",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--ease-konsol",
+        "raw": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--duration-hover",
+        "raw": "250ms",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--duration-reveal",
+        "raw": "350ms",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--duration-move",
+        "raw": "600ms",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--animate-reveal",
+        "raw": "konsol-reveal 350ms cubic-bezier(0.4, 0, 0.2, 1) both",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--cta-pad",
+        "raw": "0.375rem",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--cta-box",
+        "raw": "2.75rem",
+        "source": "src/styles.css"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "ArrowIcon",
+      "file": "src/components/konsol/button.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Button",
+      "file": "src/components/konsol/button.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "green",
+            "indigo",
+            "outline",
+            "ghost"
+          ],
+          "default": "indigo"
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "arrow",
+          "type": "boolean",
+          "default": "true"
+        }
+      ]
+    },
+    {
+      "name": "Container",
+      "file": "src/components/konsol/layout.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Section",
+      "file": "src/components/konsol/layout.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "tone",
+          "type": "enum",
+          "values": [
+            "plain",
+            "alt",
+            "green",
+            "blue",
+            "indigo",
+            "evergreen"
+          ],
+          "default": "green"
+        }
+      ]
+    },
+    {
+      "name": "SectionMuted",
+      "file": "src/components/konsol/layout.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Card",
+      "file": "src/components/konsol/card.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "fill",
+          "type": "enum",
+          "values": [
+            "none",
+            "green",
+            "blue",
+            "indigo"
+          ],
+          "default": "none"
+        }
+      ]
+    },
+    {
+      "name": "CardTitle",
+      "file": "src/components/konsol/card.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "CardDescription",
+      "file": "src/components/konsol/card.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "MonoLabel",
+      "file": "src/components/konsol/text.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Highlight",
+      "file": "src/components/konsol/text.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "TextLink",
+      "file": "src/components/konsol/text.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Badge",
+      "file": "src/components/konsol/text.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "neutral",
+            "green",
+            "indigo",
+            "outline"
+          ],
+          "default": "neutral"
+        }
+      ]
+    },
+    {
+      "name": "Alert",
+      "file": "src/components/konsol/alert.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "status",
+          "type": "enum",
+          "values": [
+            "success",
+            "warning",
+            "error",
+            "info"
+          ],
+          "default": "info"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "file": "src/components/konsol/form.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Textarea",
+      "file": "src/components/konsol/form.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Label",
+      "file": "src/components/konsol/form.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "Field",
+      "file": "src/components/konsol/form.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "htmlFor",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "hint",
+          "type": "string"
+        },
+        {
+          "name": "error",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Accordion",
+      "file": "src/components/konsol/accordion.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "AccordionItem",
+      "file": "src/components/konsol/accordion.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "title",
+          "type": "any",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "Photo",
+      "file": "src/components/konsol/media.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "tint",
+          "type": "enum",
+          "values": [
+            "green",
+            "blue",
+            "indigo"
+          ],
+          "default": "green"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "The Konsol",
+          "required": true
+        },
+        {
+          "name": "wrapperClassName",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Logo",
+      "file": "src/components/konsol/media.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "color",
+          "type": "enum",
+          "values": [
+            "black",
+            "white"
+          ],
+          "default": "black"
+        },
+        {
+          "name": "background",
+          "type": "enum",
+          "values": [
+            "transparent",
+            "solid"
+          ],
+          "default": "transparent"
+        }
+      ]
+    },
+    {
+      "name": "Avatar",
+      "file": "src/components/konsol/avatar.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "ring",
+          "type": "enum",
+          "values": [
+            "none",
+            "background",
+            "accent"
+          ],
+          "default": "none"
+        }
+      ]
+    },
+    {
+      "name": "AvatarImage",
+      "file": "src/components/konsol/avatar.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "AvatarFallback",
+      "file": "src/components/konsol/avatar.tsx",
+      "import_path": ""
+    },
+    {
+      "name": "AvatarGroup",
+      "file": "src/components/konsol/avatar.tsx",
+      "import_path": "",
+      "props": [
+        {
+          "name": "overlap",
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        }
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "file": "src/assets/fonts/inter-latin-700-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/roboto-latin-400-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/roboto-latin-500-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/roboto-latin-700-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/roboto-mono-latin-400-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/roboto-mono-latin-500-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/space-grotesk-latin-500-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/space-grotesk-latin-600-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/fonts/space-grotesk-latin-700-normal.woff2",
+      "kind": "font",
+      "format": "woff2"
+    },
+    {
+      "file": "src/assets/logos/The_Konsol_Logo_Black_Solid.webp",
+      "kind": "logo",
+      "format": "webp"
+    },
+    {
+      "file": "src/assets/logos/The_Konsol_Logo_Black_Transparent.webp",
+      "kind": "logo",
+      "format": "webp"
+    },
+    {
+      "file": "src/assets/logos/The_Konsol_Logo_White_Solid.webp",
+      "kind": "logo",
+      "format": "webp"
+    },
+    {
+      "file": "src/assets/logos/The_Konsol_Logo_White_Transparent.webp",
+      "kind": "logo",
+      "format": "webp"
+    },
+    {
+      "file": "src/assets/photography/agents/atlas.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    },
+    {
+      "file": "src/assets/photography/agents/echo.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    },
+    {
+      "file": "src/assets/photography/agents/nova.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    },
+    {
+      "file": "src/assets/photography/agents/sage.jpg",
+      "kind": "photography",
+      "format": "jpg"
+    }
+  ]
+}
