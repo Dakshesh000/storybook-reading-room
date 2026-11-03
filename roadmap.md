@@ -1,3 +1,4 @@
 - [x] Switch fonts: Inter Bold display, Space Grotesk 600 headings, Roboto body, Roboto Mono labels
 - [x] Keep the 4 logo files
 - [x] Hero lines "Scale your ideas." / "Automate with AI." recoloured to brand evergreen (dark homepage)
+- [ ] Zoom the pinned hero as one scene, keep MARKETING behind the card, and verify the light-section handoff.

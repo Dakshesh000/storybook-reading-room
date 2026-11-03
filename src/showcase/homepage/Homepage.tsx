@@ -235,12 +235,13 @@ function LogoRotator() {
 
 /**
  * "Theme Change" (dark to light): the hero pins in place and the camera zooms into the
- * top of the real MARKETING "K". The zoom is drawn by a vector SVG copy so edges stay
- * crisp; the next section resolves from a blur during the last part of the zoom.
+ * top of the real MARKETING "K". One camera moves the entire scene, with a vector
+ * headline behind the card; the next section resolves from blur during the zoom.
  */
 function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefObject<HTMLDivElement | null> }) {
   const sec = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const scene = useRef<HTMLDivElement>(null);
   const h1 = useRef<HTMLHeadingElement>(null);
   const word = useRef<HTMLSpanElement>(null);
   const k = useRef<HTMLSpanElement>(null);
@@ -248,44 +249,44 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
   const svg = useRef<SVGSVGElement>(null);
   const g = useRef<SVGGElement>(null);
   const txt = useRef<SVGTextElement>(null);
-  const fill = useRef<SVGRectElement>(null);
   const cb = useRef(onLight);
   cb.current = onLight;
   useEffect(() => {
-    const st = stage.current!, el = h1.current!, w = word.current!, kEl = k.current!, sp = spacer.current!;
-    const sv = svg.current!, gr = g.current!, tx = txt.current!, fr = fill.current!;
+    const section = sec.current, st = stage.current, sc = scene.current;
+    const el = h1.current, w = word.current, kEl = k.current, sp = spacer.current;
+    const sv = svg.current, gr = g.current, tx = txt.current;
+    if (!section || !st || !sc || !el || !w || !kEl || !sp || !sv || !gr || !tx) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let Z = 0, H = 0, top0 = 0, O = { x: 0, y: 0 }, maxScale = 1, raf = 0;
+    let Z = 0, H = 0, O = { x: 0, y: 0 }, maxScale = 1, raf = 0, disposed = false;
     const clamp = (v: number) => Math.min(Math.max(v, 0), 1);
     const ease = (v: number) => v * v * (3 - 2 * v);
     const measure = () => {
       st.style.transform = "";
+      sc.style.transform = "";
       const vw = window.innerWidth, vh = window.innerHeight;
       Z = reduce.matches ? 0 : vh * 1.6;
       sp.style.height = `${Z}px`;
       H = st.offsetHeight;
-      top0 = sec.current!.getBoundingClientRect().top + window.scrollY;
       const n = next.current;
       if (n) n.style.marginTop = reduce.matches ? "" : `${-H}px`;
       // Vector copy of the headline, aligned to the live text (scroll-independent coords).
-      const sy = window.scrollY;
       const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize);
       const wr = w.getBoundingClientRect(), kr = kEl.getBoundingClientRect();
+      const sr = st.getBoundingClientRect();
       const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
       let asc = fs * 0.9, px = kr.left + kr.width * 0.2, py = kr.top + kr.height * 0.35, rad = kr.width * 0.08;
       if (ctx) {
         ctx.font = `${cs.fontWeight} 100px ${cs.fontFamily}`;
-        asc = ctx.measureText("K").fontBoundingBoxAscent * fs / 100;
+        asc = (ctx.measureText("K").fontBoundingBoxAscent || 90) * fs / 100;
         const ink = interior(ctx, "K", `${cs.fontWeight} 300px ${cs.fontFamily}`, true);
         if (ink) { const u = fs / 100; px = kr.left + ink.x * u; py = kr.top + asc + ink.y * u; rad = ink.radius * u; }
       }
-      // Store relative to the section's top so the pinned stage maps to fixed viewport coords.
-      const secTop = top0 - sy;
-      tx.setAttribute("x", String(wr.left));
-      tx.setAttribute("y", String(wr.top - secTop + asc));
+      // Every layer uses stage-local coordinates and exactly the same camera.
+      tx.setAttribute("x", String(wr.left - sr.left));
+      tx.setAttribute("y", String(wr.top - sr.top + asc));
       tx.style.font = `${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
       tx.style.letterSpacing = cs.letterSpacing;
-      O = { x: px, y: py - secTop };
+      O = { x: px - sr.left, y: py - sr.top };
       maxScale = Math.max(1, Math.hypot(vw, vh) / Math.max(1, rad));
     };
     const frame = () => {
@@ -294,6 +295,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       const n = next.current;
       if (reduce.matches) {
         sv.style.display = "none"; el.style.visibility = "";
+        st.style.transform = ""; sc.style.transform = ""; st.style.visibility = "";
         cb.current(y > H * 0.5);
         if (n) { n.style.transform = ""; n.style.filter = ""; n.style.opacity = ""; n.style.pointerEvents = ""; }
         return;
@@ -304,17 +306,17 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       const p = Z ? hold / Z : 1;
       const e = ease(p);
       const vw = window.innerWidth, vh = window.innerHeight;
-      const vTop = sec.current!.getBoundingClientRect().top + hold; // viewport top of the pinned section
+      const sr = st.getBoundingClientRect();
       const s = Math.pow(maxScale, e);
-      const ox = O.x, oy = O.y + vTop;
-      const cx = ox + (vw / 2 - ox) * e, cy = oy + (vh / 2 - oy) * e;
+      const ox = O.x, oy = O.y;
+      const cx = ox + (vw / 2 - sr.left - ox) * e, cy = oy + (vh / 2 - sr.top - oy) * e;
       const zooming = p > 0 && p < 1;
       sv.style.display = zooming ? "" : "none";
       el.style.visibility = zooming ? "hidden" : "";
-      gr.setAttribute("transform", `translate(${cx} ${cy}) scale(${s}) translate(${-ox} ${-O.y})`);
-      // Once the counter of the K covers the view, a flat fill takes over (avoids paint limits).
-      fr.style.opacity = String(clamp((p - 0.82) / 0.08));
-      sv.style.opacity = String(1 - clamp((p - 0.92) / 0.08));
+      const dx = cx - s * ox, dy = cy - s * oy;
+      sc.style.transform = `matrix(${s}, 0, 0, ${s}, ${dx}, ${dy})`;
+      gr.setAttribute("transform", `matrix(${s} 0 0 ${s} ${dx} ${dy})`);
+      st.style.opacity = String(1 - ease(clamp((p - 0.88) / 0.12)));
       if (n) {
         const r = clamp((p - 0.55) / 0.45), er = ease(r);
         n.style.transform = p < 1 ? `translate3d(0, ${-(Z - hold)}px, 0) scale(${1.06 - 0.06 * er})` : "";
@@ -325,21 +327,28 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       cb.current(p >= 0.6);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
-    const onResize = () => { measure(); frame(); };
+    const onResize = () => { if (!disposed) { measure(); frame(); } };
     measure(); frame();
     document.fonts.ready.then(onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
+    reduce.addEventListener("change", onResize);
     return () => {
+      disposed = true;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      reduce.removeEventListener("change", onResize);
       cancelAnimationFrame(raf);
     };
   }, [next]);
   return (
     <section ref={sec} className={wrap}>
-      <div ref={stage} className="relative isolate">
-        <h1 ref={h1} className={cn(t.display, "relative z-40 mt-[28px] px-6 text-center leading-[0.78]")}><span ref={word}>MAR<span ref={k}>K</span>ETING</span></h1>
+      <div ref={stage} className="relative isolate flow-root">
+        <svg ref={svg} aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible" style={{ display: "none", textRendering: "geometricPrecision" }}>
+          <g ref={g}><text ref={txt} fill="var(--brand-parchment)">MARKETING</text></g>
+        </svg>
+        <div ref={scene} className="relative z-10 origin-top-left flow-root">
+        <h1 ref={h1} className={cn(t.display, "relative z-0 mt-[28px] px-6 text-center leading-[0.78]")}><span ref={word}>MAR<span ref={k}>K</span>ETING</span></h1>
         <div className="relative z-10 mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
 <img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
         <div className="relative z-20 max-w-md">
@@ -368,11 +377,8 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
         </div>
       </div>
       </div>
+      </div>
       <div ref={spacer} aria-hidden="true" />
-      <svg ref={svg} aria-hidden="true" className="pointer-events-none fixed inset-0 z-40 h-full w-full" style={{ display: "none", textRendering: "geometricPrecision" }}>
-        <g ref={g}><text ref={txt} fill="var(--brand-parchment)">MARKETING</text></g>
-        <rect ref={fill} width="100%" height="100%" opacity="0" fill="var(--brand-parchment)" />
-      </svg>
     </section>
   );
 }
