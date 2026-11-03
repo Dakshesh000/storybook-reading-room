@@ -616,12 +616,11 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
   const svg = useRef<SVGSVGElement>(null);
   const g = useRef<SVGGElement>(null);
   const txt = useRef<SVGTextElement>(null);
-  const fill = useRef<HTMLDivElement>(null);
   const cb = useRef(onDark);
   cb.current = onDark;
   useEffect(() => {
-    const o = outer.current, st = stage.current, sc = scene.current, sv = svg.current, gr = g.current, tx = txt.current, fl = fill.current;
-    if (!o || !st || !sc || !sv || !gr || !tx || !fl) return;
+    const o = outer.current, st = stage.current, sc = scene.current, sv = svg.current, gr = g.current, tx = txt.current;
+    if (!o || !st || !sc || !sv || !gr || !tx) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     let Z = 0, O = { x: 0, y: 0 }, maxScale = 1, raf = 0, disposed = false;
     let el: HTMLElement | null = null;
@@ -659,7 +658,7 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       const or = o.getBoundingClientRect();
       const pv = prev();
       if (reduce.matches) {
-        sv.style.display = "none"; fl.style.opacity = "0"; sc.style.transform = ""; sc.style.filter = "";
+        sv.style.display = "none"; sc.style.transform = ""; sc.style.filter = "";
         if (el) el.style.visibility = "";
         if (pv) { pv.style.filter = ""; pv.style.opacity = ""; }
         cb.current(or.top < vh * 0.5);
@@ -675,8 +674,7 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       const cx = O.x + (vw / 2 - sr.left - O.x) * z, cy = O.y + (vh / 2 - sr.top - O.y) * z;
       const dx = cx - s * O.x, dy = cy - s * O.y;
       const zooming = p < 1;
-      const covered = p < 0.02; // fully under the dark fill: nothing else needs painting
-      sv.style.display = zooming && !covered ? "" : "none";
+      sv.style.display = zooming ? "" : "none";
       if (el) el.style.visibility = zooming ? "hidden" : "";
       // Huge DOM scales are costly to paint; under the fill the scene is simply hidden.
       const big = s > 40;
@@ -685,9 +683,6 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       // Blur only near rest; at huge scales the scene is hidden under the fill (cheap to paint).
       sc.style.filter = zooming && s < 3 ? `blur(${6 * (s - 1) / 2}px)` : "";
       sc.style.visibility = big ? "hidden" : "";
-      fl.style.opacity = String(1 - ease(clamp(p / 0.25)));
-      // Dark ink while it floods the screen, then settles into the headline colour.
-      tx.style.fill = p > 0.7 ? "var(--section-indigo-foreground)" : "var(--brand-black)";
       if (pv) {
         const b = ease(a);
         pv.style.filter = a > 0 && a < 1 ? `blur(${24 * b}px)` : a >= 1 ? "blur(24px)" : "";
@@ -716,9 +711,8 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       <div ref={stage} className="relative isolate overflow-hidden pt-px">
         <div ref={scene} className="relative z-10 origin-top-left">{children}</div>
         <svg ref={svg} aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible" style={{ display: "none", textRendering: "geometricPrecision" }}>
-          <g ref={g}><text ref={txt} style={{ fill: "var(--brand-black)", transition: "fill 500ms ease" }}>Case studies</text></g>
+          <g ref={g}><text ref={txt} style={{ fill: "var(--section-indigo-foreground)" }}>Case studies</text></g>
         </svg>
-        <div ref={fill} aria-hidden="true" className="pointer-events-none absolute inset-0 z-30 bg-[var(--brand-black)]" />
       </div>
     </div>
   );
