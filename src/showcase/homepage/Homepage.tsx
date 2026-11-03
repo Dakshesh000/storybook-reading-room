@@ -675,7 +675,8 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       const cx = O.x + (vw / 2 - sr.left - O.x) * z, cy = O.y + (vh / 2 - sr.top - O.y) * z;
       const dx = cx - s * O.x, dy = cy - s * O.y;
       const zooming = p < 1;
-      sv.style.display = zooming ? "" : "none";
+      const covered = p < 0.02; // fully under the dark fill: nothing else needs painting
+      sv.style.display = zooming && !covered ? "" : "none";
       if (el) el.style.visibility = zooming ? "hidden" : "";
       // Huge DOM scales are costly to paint; under the fill the scene is simply hidden.
       const big = s > 40;
