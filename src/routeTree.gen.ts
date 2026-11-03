@@ -10,17 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ColorsRouteImport } from './routes/colors'
 import { Route as ComponentsRouteImport } from './routes/components'
 import { Route as HomepageRouteImport } from './routes/homepage'
 import { Route as LogosRouteImport } from './routes/logos'
 import { Route as TypographyRouteImport } from './routes/typography'
+import { Route as BrandIndexRouteImport } from './routes/brand.index'
+import { Route as BrandColoursRouteImport } from './routes/brand.colours'
+import { Route as BrandComponentsRouteImport } from './routes/brand.components'
+import { Route as BrandLogosRouteImport } from './routes/brand.logos'
+import { Route as BrandTypographyRouteImport } from './routes/brand.typography'
 import { Route as Char91__componentChar93PreviewSplatRouteImport } from './routes/[__component].preview.$'
 import { Route as Char91__mockupChar93PreviewSplatRouteImport } from './routes/[__mockup].preview.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrandRoute = BrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ColorsRoute = ColorsRouteImport.update({
@@ -48,6 +59,31 @@ const TypographyRoute = TypographyRouteImport.update({
   path: '/typography',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrandIndexRoute = BrandIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BrandRoute,
+} as any)
+const BrandColoursRoute = BrandColoursRouteImport.update({
+  id: '/colours',
+  path: '/colours',
+  getParentRoute: () => BrandRoute,
+} as any)
+const BrandComponentsRoute = BrandComponentsRouteImport.update({
+  id: '/components',
+  path: '/components',
+  getParentRoute: () => BrandRoute,
+} as any)
+const BrandLogosRoute = BrandLogosRouteImport.update({
+  id: '/logos',
+  path: '/logos',
+  getParentRoute: () => BrandRoute,
+} as any)
+const BrandTypographyRoute = BrandTypographyRouteImport.update({
+  id: '/typography',
+  path: '/typography',
+  getParentRoute: () => BrandRoute,
+} as any)
 const Char91__componentChar93PreviewSplatRoute =
   Char91__componentChar93PreviewSplatRouteImport.update({
     id: '/__component/preview/$',
@@ -63,11 +99,17 @@ const Char91__mockupChar93PreviewSplatRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/brand': typeof BrandRouteWithChildren
   '/colors': typeof ColorsRoute
   '/components': typeof ComponentsRoute
   '/homepage': typeof HomepageRoute
   '/logos': typeof LogosRoute
   '/typography': typeof TypographyRoute
+  '/brand/colours': typeof BrandColoursRoute
+  '/brand/components': typeof BrandComponentsRoute
+  '/brand/logos': typeof BrandLogosRoute
+  '/brand/typography': typeof BrandTypographyRoute
+  '/brand/': typeof BrandIndexRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
   '/__mockup/preview/$': typeof Char91__mockupChar93PreviewSplatRoute
 }
@@ -78,17 +120,28 @@ export interface FileRoutesByTo {
   '/homepage': typeof HomepageRoute
   '/logos': typeof LogosRoute
   '/typography': typeof TypographyRoute
+  '/brand/colours': typeof BrandColoursRoute
+  '/brand/components': typeof BrandComponentsRoute
+  '/brand/logos': typeof BrandLogosRoute
+  '/brand/typography': typeof BrandTypographyRoute
+  '/brand': typeof BrandIndexRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
   '/__mockup/preview/$': typeof Char91__mockupChar93PreviewSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/brand': typeof BrandRouteWithChildren
   '/colors': typeof ColorsRoute
   '/components': typeof ComponentsRoute
   '/homepage': typeof HomepageRoute
   '/logos': typeof LogosRoute
   '/typography': typeof TypographyRoute
+  '/brand/colours': typeof BrandColoursRoute
+  '/brand/components': typeof BrandComponentsRoute
+  '/brand/logos': typeof BrandLogosRoute
+  '/brand/typography': typeof BrandTypographyRoute
+  '/brand/': typeof BrandIndexRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
   '/__mockup/preview/$': typeof Char91__mockupChar93PreviewSplatRoute
 }
@@ -96,11 +149,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/brand'
     | '/colors'
     | '/components'
     | '/homepage'
     | '/logos'
     | '/typography'
+    | '/brand/colours'
+    | '/brand/components'
+    | '/brand/logos'
+    | '/brand/typography'
+    | '/brand/'
     | '/__component/preview/$'
     | '/__mockup/preview/$'
   fileRoutesByTo: FileRoutesByTo
@@ -111,22 +170,34 @@ export interface FileRouteTypes {
     | '/homepage'
     | '/logos'
     | '/typography'
+    | '/brand/colours'
+    | '/brand/components'
+    | '/brand/logos'
+    | '/brand/typography'
+    | '/brand'
     | '/__component/preview/$'
     | '/__mockup/preview/$'
   id:
     | '__root__'
     | '/'
+    | '/brand'
     | '/colors'
     | '/components'
     | '/homepage'
     | '/logos'
     | '/typography'
+    | '/brand/colours'
+    | '/brand/components'
+    | '/brand/logos'
+    | '/brand/typography'
+    | '/brand/'
     | '/__component/preview/$'
     | '/__mockup/preview/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BrandRoute: typeof BrandRouteWithChildren
   ColorsRoute: typeof ColorsRoute
   ComponentsRoute: typeof ComponentsRoute
   HomepageRoute: typeof HomepageRoute
@@ -143,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/brand': {
+      id: '/brand'
+      path: '/brand'
+      fullPath: '/brand'
+      preLoaderRoute: typeof BrandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/colors': {
@@ -180,6 +258,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TypographyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/brand/': {
+      id: '/brand/'
+      path: '/'
+      fullPath: '/brand/'
+      preLoaderRoute: typeof BrandIndexRouteImport
+      parentRoute: typeof BrandRoute
+    }
+    '/brand/colours': {
+      id: '/brand/colours'
+      path: '/colours'
+      fullPath: '/brand/colours'
+      preLoaderRoute: typeof BrandColoursRouteImport
+      parentRoute: typeof BrandRoute
+    }
+    '/brand/components': {
+      id: '/brand/components'
+      path: '/components'
+      fullPath: '/brand/components'
+      preLoaderRoute: typeof BrandComponentsRouteImport
+      parentRoute: typeof BrandRoute
+    }
+    '/brand/logos': {
+      id: '/brand/logos'
+      path: '/logos'
+      fullPath: '/brand/logos'
+      preLoaderRoute: typeof BrandLogosRouteImport
+      parentRoute: typeof BrandRoute
+    }
+    '/brand/typography': {
+      id: '/brand/typography'
+      path: '/typography'
+      fullPath: '/brand/typography'
+      preLoaderRoute: typeof BrandTypographyRouteImport
+      parentRoute: typeof BrandRoute
+    }
     '/__component/preview/$': {
       id: '/__component/preview/$'
       path: '/__component/preview/$'
@@ -197,8 +310,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface BrandRouteChildren {
+  BrandColoursRoute: typeof BrandColoursRoute
+  BrandComponentsRoute: typeof BrandComponentsRoute
+  BrandLogosRoute: typeof BrandLogosRoute
+  BrandTypographyRoute: typeof BrandTypographyRoute
+  BrandIndexRoute: typeof BrandIndexRoute
+}
+
+const BrandRouteChildren: BrandRouteChildren = {
+  BrandColoursRoute: BrandColoursRoute,
+  BrandComponentsRoute: BrandComponentsRoute,
+  BrandLogosRoute: BrandLogosRoute,
+  BrandTypographyRoute: BrandTypographyRoute,
+  BrandIndexRoute: BrandIndexRoute,
+}
+
+const BrandRouteWithChildren = BrandRoute._addFileChildren(BrandRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BrandRoute: BrandRouteWithChildren,
   ColorsRoute: ColorsRoute,
   ComponentsRoute: ComponentsRoute,
   HomepageRoute: HomepageRoute,
