@@ -292,7 +292,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
     };
     const frame = () => {
       raf = 0;
-      const y = window.scrollY - top0;
+      const y = window.scrollY; // pin from the very first scroll
       const n = next.current;
       if (reduce.matches) {
         sv.style.display = "none"; el.style.visibility = "";
