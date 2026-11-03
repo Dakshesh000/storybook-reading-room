@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
@@ -234,59 +234,95 @@ function LogoRotator() {
 }
 
 /**
- * "Theme Change" (dark to light): the real MARKETING headline holds still while the
- * green box scrolls beneath it, then the camera zooms into the top of its "K".
+ * "Theme Change" (dark to light): the hero pins in place and the camera zooms into the
+ * top of the real MARKETING "K". The zoom is drawn by a vector SVG copy so edges stay
+ * crisp; the next section resolves from a blur during the last part of the zoom.
  */
-function Hero({ onLight }: { onLight: (light: boolean) => void }) {
+function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefObject<HTMLDivElement | null> }) {
+  const sec = useRef<HTMLElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const h1 = useRef<HTMLHeadingElement>(null);
+  const word = useRef<HTMLSpanElement>(null);
   const k = useRef<HTMLSpanElement>(null);
-  const box = useRef<HTMLDivElement>(null);
   const spacer = useRef<HTMLDivElement>(null);
+  const svg = useRef<SVGSVGElement>(null);
+  const g = useRef<SVGGElement>(null);
+  const txt = useRef<SVGTextElement>(null);
+  const fill = useRef<SVGRectElement>(null);
   const cb = useRef(onLight);
   cb.current = onLight;
   useEffect(() => {
-    const el = h1.current!, kEl = k.current!, boxEl = box.current!, sp = spacer.current!;
+    const st = stage.current!, el = h1.current!, w = word.current!, kEl = k.current!, sp = spacer.current!;
+    const sv = svg.current!, gr = g.current!, tx = txt.current!, fr = fill.current!;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let phase1 = 0, zoom = 1, origin = { x: 0, y: 0 }, top0 = 0, left0 = 0, maxScale = 1, raf = 0;
+    let Z = 0, H = 0, top0 = 0, O = { x: 0, y: 0 }, maxScale = 1, raf = 0;
+    const clamp = (v: number) => Math.min(Math.max(v, 0), 1);
+    const ease = (v: number) => v * v * (3 - 2 * v);
     const measure = () => {
-      el.style.transform = "";
-      const vh = window.innerHeight, vw = window.innerWidth;
-      zoom = vh * 1.3;
-      sp.style.height = reduce.matches ? "0px" : `${zoom}px`;
-      const r = el.getBoundingClientRect(), kr = kEl.getBoundingClientRect(), br = boxEl.getBoundingClientRect();
-      top0 = r.top + window.scrollY; left0 = r.left;
-      phase1 = Math.max(0, br.bottom - r.top);
-      const cs = getComputedStyle(kEl), fs = parseFloat(cs.fontSize);
+      st.style.transform = "";
+      const vw = window.innerWidth, vh = window.innerHeight;
+      Z = reduce.matches ? 0 : vh * 1.6;
+      sp.style.height = `${Z}px`;
+      H = st.offsetHeight;
+      top0 = sec.current!.getBoundingClientRect().top + window.scrollY;
+      const n = next.current;
+      if (n) n.style.marginTop = reduce.matches ? "" : `${-H}px`;
+      // Vector copy of the headline, aligned to the live text (scroll-independent coords).
+      const sy = window.scrollY;
+      const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize);
+      const wr = w.getBoundingClientRect(), kr = kEl.getBoundingClientRect();
       const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
-      let px = kr.left + kr.width * 0.2, py = kr.top + kr.height * 0.35, rad = kr.width * 0.08;
+      let asc = fs * 0.9, px = kr.left + kr.width * 0.2, py = kr.top + kr.height * 0.35, rad = kr.width * 0.08;
       if (ctx) {
         ctx.font = `${cs.fontWeight} 100px ${cs.fontFamily}`;
-        const fAsc = ctx.measureText("K").fontBoundingBoxAscent;
+        asc = ctx.measureText("K").fontBoundingBoxAscent * fs / 100;
         const ink = interior(ctx, "K", `${cs.fontWeight} 300px ${cs.fontFamily}`, true);
-        if (ink && fAsc) {
-          const u = fs / 100, baseline = kr.top + fAsc * u;
-          px = kr.left + ink.x * u; py = baseline + ink.y * u; rad = ink.radius * u;
-        }
+        if (ink) { const u = fs / 100; px = kr.left + ink.x * u; py = kr.top + asc + ink.y * u; rad = ink.radius * u; }
       }
-      origin = { x: px - r.left, y: py - r.top };
+      // Store relative to the section's top so the pinned stage maps to fixed viewport coords.
+      const secTop = top0 - sy;
+      tx.setAttribute("x", String(wr.left));
+      tx.setAttribute("y", String(wr.top - secTop + asc));
+      tx.style.font = `${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
+      tx.style.letterSpacing = cs.letterSpacing;
+      O = { x: px, y: py - secTop };
       maxScale = Math.max(1, Math.hypot(vw, vh) / Math.max(1, rad));
     };
     const frame = () => {
       raf = 0;
-      const y = window.scrollY;
-      if (reduce.matches) { el.style.transform = ""; cb.current(y > top0 + phase1); return; }
-      const hold = Math.min(Math.max(y, 0), phase1 + zoom);
-      const tz = Math.min(Math.max((hold - phase1) / zoom, 0), 1);
-      const e = tz * tz * (3 - 2 * tz);
-      const s = Math.pow(maxScale, e);
+      const y = window.scrollY; // pin from the very first scroll
+      const n = next.current;
+      if (reduce.matches) {
+        sv.style.display = "none"; el.style.visibility = "";
+        cb.current(y > H * 0.5);
+        if (n) { n.style.transform = ""; n.style.filter = ""; n.style.opacity = ""; n.style.pointerEvents = ""; }
+        return;
+      }
+      const hold = Math.min(Math.max(y, 0), Z);
+      st.style.transform = `translate3d(0, ${hold}px, 0)`;
+      st.style.visibility = hold >= Z ? "hidden" : "";
+      const p = Z ? hold / Z : 1;
+      const e = ease(p);
       const vw = window.innerWidth, vh = window.innerHeight;
-      const baseTop = top0 - y + hold; // viewport top of the held headline
-      const dx = (vw / 2 - (left0 + origin.x)) * e;
-      const dy = (vh / 2 - (baseTop + origin.y)) * e;
-      el.style.transformOrigin = `${origin.x}px ${origin.y}px`;
-      el.style.transform = `translate3d(${dx}px, ${hold + dy}px, 0) scale(${s})`;
-      el.style.opacity = tz >= 1 ? "0" : "1";
-      cb.current(tz >= 0.9);
+      const vTop = sec.current!.getBoundingClientRect().top + hold; // viewport top of the pinned section
+      const s = Math.pow(maxScale, e);
+      const ox = O.x, oy = O.y + vTop;
+      const cx = ox + (vw / 2 - ox) * e, cy = oy + (vh / 2 - oy) * e;
+      const zooming = p > 0 && p < 1;
+      sv.style.display = zooming ? "" : "none";
+      el.style.visibility = zooming ? "hidden" : "";
+      gr.setAttribute("transform", `translate(${cx} ${cy}) scale(${s}) translate(${-ox} ${-O.y})`);
+      // Once the counter of the K covers the view, a flat fill takes over (avoids paint limits).
+      fr.style.opacity = String(clamp((p - 0.82) / 0.08));
+      sv.style.opacity = String(1 - clamp((p - 0.92) / 0.08));
+      if (n) {
+        const r = clamp((p - 0.55) / 0.45), er = ease(r);
+        n.style.transform = p < 1 ? `translate3d(0, ${-(Z - hold)}px, 0) scale(${1.06 - 0.06 * er})` : "";
+        n.style.filter = p < 1 ? `blur(${24 * (1 - er)}px)` : "";
+        n.style.opacity = p < 1 ? String(er) : "";
+        n.style.pointerEvents = p < 1 ? "none" : "";
+      }
+      cb.current(p >= 0.6);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
     const onResize = () => { measure(); frame(); };
@@ -299,12 +335,13 @@ function Hero({ onLight }: { onLight: (light: boolean) => void }) {
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [next]);
   return (
-    <section className={wrap}>
-      <h1 ref={h1} className={cn(t.display, "relative z-30 mt-[28px] px-6 text-center leading-[0.78] will-change-transform")}>MAR<span ref={k}>K</span>ETING</h1>
-      <div ref={box} className="relative z-10 mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
-        <img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
+    <section ref={sec} className={wrap}>
+      <div ref={stage} className="relative isolate">
+        <h1 ref={h1} className={cn(t.display, "relative z-40 mt-[28px] px-6 text-center leading-[0.78]")}><span ref={word}>MAR<span ref={k}>K</span>ETING</span></h1>
+        <div className="relative z-10 mx-3 mt-4 min-h-[512px] rounded-section bg-section-green p-8 text-section-green-foreground md:p-10">
+<img src={img.gtmFigure} alt="Person in a suit wearing a GTM mask" className="pointer-events-none absolute bottom-0 right-0 z-10 h-[55%] w-auto max-w-none opacity-90 md:left-1/2 md:right-auto md:h-[115%] md:-translate-x-1/2 md:opacity-100" />
         <div className="relative z-20 max-w-md">
           <Reveal>
             <p className={cn(t.h2, "text-evergreen")}>Scale your ideas.</p>
@@ -330,7 +367,12 @@ function Hero({ onLight }: { onLight: (light: boolean) => void }) {
           <LogoRotator />
         </div>
       </div>
+      </div>
       <div ref={spacer} aria-hidden="true" />
+      <svg ref={svg} aria-hidden="true" className="pointer-events-none fixed inset-0 z-40 h-full w-full" style={{ display: "none", textRendering: "geometricPrecision" }}>
+        <g ref={g}><text ref={txt} fill="var(--brand-parchment)">MARKETING</text></g>
+        <rect ref={fill} width="100%" height="100%" opacity="0" fill="var(--brand-parchment)" />
+      </svg>
     </section>
   );
 }
@@ -759,6 +801,7 @@ export function Homepage() {
   // Single dark version of the website; the light version is archived.
   // The page starts dark; the portal "Theme Change" after the hero turns it light.
   const [light, setLight] = useState(false);
+  const next = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", !light);
@@ -769,16 +812,18 @@ export function Homepage() {
       <ThemeBar />
       <main>
         <Header />
-        <Hero onLight={setLight} />
-        <Intro />
-        <BluePanel />
+        <Hero onLight={setLight} next={next} />
+        <div ref={next} className="relative z-[41] bg-background origin-top">
+          <Intro />
+          <BluePanel />
         <Services />
         <About />
         <CaseStudies />
         <Testimonials />
         <Faq />
         <Pricing />
-        <Footer />
+          <Footer />
+        </div>
       </main>
     </div>
   );
