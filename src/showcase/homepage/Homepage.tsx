@@ -285,8 +285,6 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       tx.setAttribute("y", String(wr.top - secTop + asc));
       tx.style.font = `${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
       tx.style.letterSpacing = cs.letterSpacing;
-      tx.setAttribute("fill", cs.color);
-      fr.setAttribute("fill", cs.color);
       O = { x: px, y: py - secTop };
       maxScale = Math.max(1, Math.hypot(vw, vh) / Math.max(1, rad));
     };
@@ -302,6 +300,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       }
       const hold = Math.min(Math.max(y, 0), Z);
       st.style.transform = `translate3d(0, ${hold}px, 0)`;
+      st.style.visibility = hold >= Z ? "hidden" : "";
       const p = Z ? hold / Z : 1;
       const e = ease(p);
       const vw = window.innerWidth, vh = window.innerHeight;
@@ -371,8 +370,8 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       </div>
       <div ref={spacer} aria-hidden="true" />
       <svg ref={svg} aria-hidden="true" className="pointer-events-none fixed inset-0 z-40 h-full w-full" style={{ display: "none", textRendering: "geometricPrecision" }}>
-        <g ref={g}><text ref={txt}>MARKETING</text></g>
-        <rect ref={fill} width="100%" height="100%" opacity="0" />
+        <g ref={g}><text ref={txt} fill="var(--brand-parchment)">MARKETING</text></g>
+        <rect ref={fill} width="100%" height="100%" opacity="0" fill="var(--brand-parchment)" />
       </svg>
     </section>
   );
