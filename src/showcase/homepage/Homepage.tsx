@@ -815,15 +815,15 @@ export function Homepage() {
         <Hero onLight={setLight} next={next} />
         <div ref={next} className="relative z-[41] bg-background origin-top will-change-[filter,opacity]">
           <Intro />
-        </div>
-        <BluePanel />
+          <BluePanel />
         <Services />
         <About />
         <CaseStudies />
         <Testimonials />
         <Faq />
         <Pricing />
-        <Footer />
+          <Footer />
+        </div>
       </main>
     </div>
   );
