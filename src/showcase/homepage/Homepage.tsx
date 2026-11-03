@@ -571,7 +571,7 @@ function CaseStudies() {
             <span className="bg-parchment px-2 py-1 text-evergreen">05</span>
             <span className="bg-btn-indigo-hover px-3 py-1">Projects</span>
           </p>
-          <h2 className={cn(t.h1, "mt-4")}>Case studies</h2>
+          <h2 data-case-title className={cn(t.h1, "mt-4")}><span data-case-word><span data-case-c>C</span>ase studies</span></h2>
         </div>
         <div key={`t${i}`} className="order-3 flex animate-reveal flex-col px-6 pb-10 md:order-none md:row-start-2 md:pb-16">
           <h3 className={t.h1}>{c.name[0]} <br /> {c.name[1]}</h3>
@@ -600,6 +600,127 @@ function CaseStudies() {
         </a>
       </div>
     </section>
+  );
+}
+
+/* ============ Theme Change: light to dark (reverse portal on the "C") ============ */
+/**
+ * Reverse of the hero portal: while the stage rises, it is shown fully zoomed into the
+ * ink of the "C" (dark), covering the outgoing light content, which blurs away.
+ * Pinned, the camera then pulls back out of the "C" until the scene rests at 1x.
+ */
+function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; children: ReactNode }) {
+  const outer = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const scene = useRef<HTMLDivElement>(null);
+  const svg = useRef<SVGSVGElement>(null);
+  const g = useRef<SVGGElement>(null);
+  const txt = useRef<SVGTextElement>(null);
+  const fill = useRef<HTMLDivElement>(null);
+  const cb = useRef(onDark);
+  cb.current = onDark;
+  useEffect(() => {
+    const o = outer.current, st = stage.current, sc = scene.current, sv = svg.current, gr = g.current, tx = txt.current, fl = fill.current;
+    if (!o || !st || !sc || !sv || !gr || !tx || !fl) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let Z = 0, O = { x: 0, y: 0 }, maxScale = 1, raf = 0, disposed = false;
+    let el: HTMLElement | null = null;
+    const clamp = (v: number) => Math.min(Math.max(v, 0), 1);
+    const ease = (v: number) => v * v * (3 - 2 * v);
+    const prev = () => o.previousElementSibling as HTMLElement | null;
+    const measure = () => {
+      sc.style.transform = "";
+      el = sc.querySelector<HTMLElement>("[data-case-title]");
+      const w = sc.querySelector<HTMLElement>("[data-case-word]"), c = sc.querySelector<HTMLElement>("[data-case-c]");
+      const vw = window.innerWidth, vh = window.innerHeight;
+      Z = reduce.matches ? 0 : vh * 1.6;
+      o.style.height = `${st.offsetHeight + Z}px`;
+      if (!el || !w || !c) return;
+      const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize);
+      const sr = st.getBoundingClientRect(), wr = w.getBoundingClientRect(), kr = c.getBoundingClientRect();
+      const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+      let asc = fs * 0.9, px = kr.left + kr.width * 0.12, py = kr.top + kr.height * 0.5, rad = kr.width * 0.06;
+      if (ctx) {
+        ctx.font = `${cs.fontWeight} 100px ${cs.fontFamily}`;
+        asc = (ctx.measureText("C").fontBoundingBoxAscent || 90) * fs / 100;
+        const ink = interior(ctx, "C", `${cs.fontWeight} 300px ${cs.fontFamily}`);
+        if (ink) { const u = fs / 100; px = kr.left + ink.x * u; py = kr.top + asc + ink.y * u; rad = ink.radius * u; }
+      }
+      tx.setAttribute("x", String(wr.left - sr.left));
+      tx.setAttribute("y", String(wr.top - sr.top + asc));
+      tx.style.font = `${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
+      tx.style.letterSpacing = cs.letterSpacing;
+      O = { x: px - sr.left, y: py - sr.top };
+      maxScale = Math.max(1, Math.hypot(vw, vh) / Math.max(1, rad));
+    };
+    const frame = () => {
+      raf = 0;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const or = o.getBoundingClientRect();
+      const pv = prev();
+      if (reduce.matches) {
+        sv.style.display = "none"; fl.style.opacity = "0"; sc.style.transform = ""; sc.style.filter = "";
+        if (el) el.style.visibility = "";
+        if (pv) { pv.style.filter = ""; pv.style.opacity = ""; }
+        cb.current(or.top < vh * 0.5);
+        return;
+      }
+      const hold = Math.min(Math.max(-or.top, 0), Z);
+      const p = Z ? hold / Z : 1;
+      const a = clamp(1 - or.top / vh); // approach: stage rising from the bottom edge
+      const e = ease(p), z = 1 - e;
+      st.style.transform = `translate3d(0, ${hold}px, 0)`;
+      const sr = st.getBoundingClientRect();
+      const s = Math.pow(maxScale, z);
+      const cx = O.x + (vw / 2 - sr.left - O.x) * z, cy = O.y + (vh / 2 - sr.top - O.y) * z;
+      const dx = cx - s * O.x, dy = cy - s * O.y;
+      const zooming = p < 1;
+      const covered = p < 0.02; // fully under the dark fill: nothing else needs painting
+      sv.style.display = zooming && !covered ? "" : "none";
+      if (el) el.style.visibility = zooming ? "hidden" : "";
+      // Huge DOM scales are costly to paint; under the fill the scene is simply hidden.
+      const big = s > 40;
+      sc.style.transform = zooming && !big ? `matrix(${s}, 0, 0, ${s}, ${dx}, ${dy})` : "";
+      gr.setAttribute("transform", `matrix(${s} 0 0 ${s} ${dx} ${dy})`);
+      // Blur only near rest; at huge scales the scene is hidden under the fill (cheap to paint).
+      sc.style.filter = zooming && s < 3 ? `blur(${6 * (s - 1) / 2}px)` : "";
+      sc.style.visibility = big ? "hidden" : "";
+      fl.style.opacity = String(1 - ease(clamp(p / 0.25)));
+      // Dark ink while it floods the screen, then settles into the headline colour.
+      tx.style.fill = p > 0.7 ? "var(--section-indigo-foreground)" : "var(--brand-black)";
+      if (pv) {
+        const b = ease(a);
+        pv.style.filter = a > 0 && a < 1 ? `blur(${24 * b}px)` : a >= 1 ? "blur(24px)" : "";
+        pv.style.opacity = a > 0 ? String(1 - b) : "";
+      }
+      cb.current(a >= 0.6);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
+    const onResize = () => { if (!disposed) { measure(); frame(); } };
+    measure(); frame();
+    document.fonts.ready.then(onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    reduce.addEventListener("change", onResize);
+    return () => {
+      disposed = true;
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      reduce.removeEventListener("change", onResize);
+      cancelAnimationFrame(raf);
+      const pv = prev(); if (pv) { pv.style.filter = ""; pv.style.opacity = ""; }
+    };
+  }, []);
+  return (
+    <div ref={outer} className="relative">
+      <div ref={stage} className="relative isolate overflow-hidden pt-px">
+        <div ref={scene} className="relative z-10 origin-top-left">{children}</div>
+        <svg ref={svg} aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible" style={{ display: "none", textRendering: "geometricPrecision" }}>
+          <g ref={g}><text ref={txt} style={{ fill: "var(--brand-black)", transition: "fill 500ms ease" }}>Case studies</text></g>
+        </svg>
+        <div ref={fill} aria-hidden="true" className="pointer-events-none absolute inset-0 z-30 bg-[var(--brand-black)]" />
+      </div>
+    </div>
   );
 }
 
@@ -810,12 +931,13 @@ export function Homepage() {
   // Single dark version of the website; the light version is archived.
   // The page starts dark; the portal "Theme Change" after the hero turns it light.
   const [light, setLight] = useState(false);
+  const [caseDark, setCaseDark] = useState(false);
   const next = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.toggle("dark", !light);
+    root.classList.toggle("dark", !light || caseDark);
     return () => root.classList.remove("dark");
-  }, [light]);
+  }, [light, caseDark]);
   return (
     <div className="min-h-screen overflow-x-clip bg-background text-foreground transition-colors duration-move ease-konsol motion-reduce:transition-none">
       <ThemeBar />
@@ -827,7 +949,7 @@ export function Homepage() {
           <BluePanel />
         <Services />
         <About />
-        <CaseStudies />
+        <CasePortal onDark={setCaseDark}><CaseStudies /></CasePortal>
         <Testimonials />
         <Faq />
         <Pricing />
