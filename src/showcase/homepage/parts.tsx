@@ -145,7 +145,8 @@ export function Reveal({ children, className, delay = 0 }: { children: ReactNode
 }
 
 /* ---------- Characters ink in from muted to full colour ---------- */
-export function InkReveal({ text, delay = 400, step = 28 }: { text: string; delay?: number; step?: number }) {
+/** Text inks in character by character. `fill` is the colour the inked characters take (defaults to the text colour). */
+export function InkReveal({ text, delay = 400, step = 28, fill = "text-current" }: { text: string; delay?: number; step?: number; fill?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [n, setN] = useState(0);
   const chars = Array.from(text);
@@ -173,7 +174,7 @@ export function InkReveal({ text, delay = 400, step = 28 }: { text: string; dela
   return (
     <span ref={ref} aria-label={text}>
       {chars.map((c, i) => (
-        <span key={i} aria-hidden="true" className={cn("transition-colors duration-hover", i < n ? "text-current" : "text-border")}>
+        <span key={i} aria-hidden="true" className={cn("transition-colors duration-hover", i < n ? fill : "text-border")}>
           {c}
         </span>
       ))}
