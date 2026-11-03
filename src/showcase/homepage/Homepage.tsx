@@ -311,7 +311,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       const zooming = p > 0 && p < 1;
       sv.style.display = zooming ? "" : "none";
       el.style.visibility = zooming ? "hidden" : "";
-      gr.setAttribute("transform", `translate(${cx} ${cy}) scale(${s}) translate(${-ox} ${-oy})`);
+      gr.setAttribute("transform", `translate(${cx} ${cy}) scale(${s}) translate(${-ox} ${-O.y})`);
       // Once the counter of the K covers the view, a flat fill takes over (avoids paint limits).
       fr.style.opacity = String(clamp((p - 0.82) / 0.08));
       sv.style.opacity = String(1 - clamp((p - 0.92) / 0.08));
