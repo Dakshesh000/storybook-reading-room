@@ -386,7 +386,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
 /* ============ Intro ============ */
 function Intro() {
   return (
-    <section className={cn(wrap, "px-6 pb-20 pt-10")}>
+    <section className={cn(wrap, "px-6 pb-20 pt-12")}>
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
         <div className="flex min-w-0 flex-col justify-between gap-8">
           <p className="flex items-center gap-2 text-muted-foreground">
