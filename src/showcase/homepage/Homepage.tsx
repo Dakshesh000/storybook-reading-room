@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
@@ -238,7 +238,7 @@ function LogoRotator() {
  * top of the real MARKETING "K". The zoom is drawn by a vector SVG copy so edges stay
  * crisp; the next section resolves from a blur during the last part of the zoom.
  */
-function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: React.RefObject<HTMLDivElement | null> }) {
+function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefObject<HTMLDivElement | null> }) {
   const sec = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const h1 = useRef<HTMLHeadingElement>(null);
@@ -312,7 +312,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: Reac
       const zooming = p > 0 && p < 1;
       sv.style.display = zooming ? "" : "none";
       el.style.visibility = zooming ? "hidden" : "";
-      gr.setAttribute("transform", `translate(${cx} ${cy}) scale(${s}) translate(${-ox} ${-vTop - O.y + oy - vTop} )`.replace(`translate(${-ox} ${-vTop - O.y + oy - vTop} )`, `translate(${-ox} ${-oy + vTop})`));
+      gr.setAttribute("transform", `translate(${cx} ${cy}) scale(${s}) translate(${-ox} ${-oy})`);
       // Once the counter of the K covers the view, a flat fill takes over (avoids paint limits).
       fr.style.opacity = String(clamp((p - 0.82) / 0.08));
       sv.style.opacity = String(1 - clamp((p - 0.92) / 0.08));
