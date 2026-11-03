@@ -212,7 +212,7 @@ import { components } from "@/.generated/mockup-components";
 
 type PreviewEntry = (typeof components)[string];
 type SpecimenProps = Record<string, string | number | boolean>;
-type SchemaProp = { name: string; type?: string; values?: string[] };
+type SchemaProp = { name: string; type?: string; values?: string[]; default?: string; required?: boolean };
 
 export const Route = createFileRoute("/__component/preview/$")({
   component: ComponentPreview,
@@ -664,7 +664,7 @@ export function mockupPreviewPlugin(options: MockupPreviewPluginOptions = {}): P
       "  isDefault: boolean;",
       "  file?: string;",
       "  props: Record<string, string | number | boolean>;",
-      "  schemaProps: Array<{ name: string; type?: string; values?: string[] }>;",
+      "  schemaProps: Array<{ name: string; type?: string; values?: string[]; default?: string; required?: boolean }>;",
       "  variants?: Record<string, string[]>;",
       "}",
       "export const mockups: Record<string, PreviewLoader> = {",
