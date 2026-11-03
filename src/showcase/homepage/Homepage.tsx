@@ -813,7 +813,7 @@ export function Homepage() {
       <main>
         <Header />
         <Hero onLight={setLight} next={next} />
-        <div ref={next} className="relative z-[41] bg-background origin-top will-change-[filter,opacity]">
+        <div ref={next} className="relative z-[41] bg-background origin-top">
           <Intro />
           <BluePanel />
         <Services />
