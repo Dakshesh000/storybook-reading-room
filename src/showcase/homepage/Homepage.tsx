@@ -686,7 +686,8 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       sc.style.filter = zooming && s < 3 ? `blur(${6 * (s - 1) / 2}px)` : "";
       sc.style.visibility = big ? "hidden" : "";
       fl.style.opacity = String(1 - ease(clamp(p / 0.25)));
-      tx.style.opacity = String(1 - ease(clamp((p - 0.8) / 0.2)));
+      // Dark ink while it floods the screen, then settles into the headline colour.
+      tx.style.fill = p > 0.7 ? "var(--section-indigo-foreground)" : "var(--brand-black)";
       if (pv) {
         const b = ease(a);
         pv.style.filter = a > 0 && a < 1 ? `blur(${24 * b}px)` : a >= 1 ? "blur(24px)" : "";
@@ -715,7 +716,7 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       <div ref={stage} className="relative isolate overflow-hidden pt-px">
         <div ref={scene} className="relative z-10 origin-top-left">{children}</div>
         <svg ref={svg} aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 h-full w-full overflow-visible" style={{ display: "none", textRendering: "geometricPrecision" }}>
-          <g ref={g}><text ref={txt} fill="var(--brand-black)">Case studies</text></g>
+          <g ref={g}><text ref={txt} style={{ fill: "var(--brand-black)", transition: "fill 500ms ease" }}>Case studies</text></g>
         </svg>
         <div ref={fill} aria-hidden="true" className="pointer-events-none absolute inset-0 z-30 bg-[var(--brand-black)]" />
       </div>
