@@ -679,7 +679,9 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       if (el) el.style.visibility = zooming ? "hidden" : "";
       sc.style.transform = zooming ? `matrix(${s}, 0, 0, ${s}, ${dx}, ${dy})` : "";
       gr.setAttribute("transform", `matrix(${s} 0 0 ${s} ${dx} ${dy})`);
-      sc.style.filter = zooming ? `blur(${10 * ease(clamp(z / 0.6))}px)` : "";
+      // Blur only near rest; at huge scales the scene is hidden under the fill (cheap to paint).
+      sc.style.filter = zooming && s < 3 ? `blur(${6 * (s - 1) / 2}px)` : "";
+      sc.style.visibility = s > 40 ? "hidden" : "";
       fl.style.opacity = String(1 - ease(clamp(p / 0.25)));
       tx.style.opacity = String(1 - ease(clamp((p - 0.8) / 0.2)));
       if (pv) {
