@@ -671,7 +671,7 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       if (reduce.matches) {
         sv.style.display = "none"; sc.style.transform = ""; sc.style.filter = "";
         if (el) el.style.visibility = "";
-        if (pv) { pv.style.filter = ""; pv.style.opacity = ""; }
+        if (pv) { pv.style.filter = ""; pv.style.opacity = ""; pv.style.transform = ""; }
         cb.current(or.top < vh * 0.5);
         return;
       }
@@ -694,12 +694,20 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       // Blur only near rest; at huge scales the scene is hidden under the fill (cheap to paint).
       sc.style.filter = zooming && s < 3 ? `blur(${6 * (s - 1) / 2}px)` : "";
       sc.style.visibility = big ? "hidden" : "";
+      // While the scene is hidden, paint the panel colour so no dark page shows around the C.
+      st.style.backgroundColor = zooming && s > 1.5 ? "var(--section-indigo)" : "";
       if (pv) {
         const b = ease(a);
-        pv.style.filter = a > 0 && a < 1 ? `blur(${24 * b}px)` : a >= 1 ? "blur(24px)" : "";
-        pv.style.opacity = a > 0 ? String(1 - b) : "";
+        if (a > 0) {
+          // Shrink into the C: origin is the C's point (stage top sits at the viewport bottom edge as a→0).
+          const pr = pv.getBoundingClientRect();
+          pv.style.transformOrigin = `${sr.left + O.x - pr.left}px ${Math.min(sr.top, vh) - pr.top}px`;
+          pv.style.transform = `scale(${1 - 0.4 * b})`;
+          pv.style.filter = `blur(${16 * b}px)`;
+          pv.style.opacity = String(1 - b);
+        } else { pv.style.transform = ""; pv.style.filter = ""; pv.style.opacity = ""; pv.style.transform = ""; pv.style.transformOrigin = ""; }
       }
-      cb.current(a >= 0.6);
+      cb.current(a >= 1);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(frame); };
     const onResize = () => { if (!disposed) { measure(); frame(); } };
@@ -714,7 +722,7 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       window.removeEventListener("resize", onResize);
       reduce.removeEventListener("change", onResize);
       cancelAnimationFrame(raf);
-      const pv = prev(); if (pv) { pv.style.filter = ""; pv.style.opacity = ""; }
+      const pv = prev(); if (pv) { pv.style.filter = ""; pv.style.opacity = ""; pv.style.transform = ""; }
     };
   }, []);
   return (
