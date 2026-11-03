@@ -70,7 +70,7 @@ function Header() {
     </a>
   );
   return (
-    <header className={cn("dark sticky top-[42px] z-50 text-foreground", compact && "pointer-events-none")}>
+    <header className={cn("dark sticky top-[42px] z-50 h-[88px] text-foreground sm:h-[100px]", compact && "pointer-events-none")}>
       <div className={cn("mx-auto flex max-w-[1440px] items-center", motion, compact ? "px-3 pt-3" : "px-6 py-6")}>
         {!compact && (
           <a href="#" aria-label="The Konsol home" className={cn("flex shrink-0 items-center rounded-control", ring)}>
@@ -295,7 +295,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       const n = next.current;
       if (reduce.matches) {
         sv.style.display = "none"; el.style.visibility = "";
-        st.style.transform = ""; sc.style.transform = ""; st.style.visibility = "";
+        st.style.transform = ""; sc.style.transform = ""; st.style.visibility = ""; st.style.opacity = "";
         cb.current(y > H * 0.5);
         if (n) { n.style.transform = ""; n.style.filter = ""; n.style.opacity = ""; n.style.pointerEvents = ""; }
         return;
