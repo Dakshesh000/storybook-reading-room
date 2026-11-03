@@ -683,6 +683,8 @@ function CasePortal({ onDark, children }: { onDark: (dark: boolean) => void; chi
       // Blur only near rest; at huge scales the scene is hidden under the fill (cheap to paint).
       sc.style.filter = zooming && s < 3 ? `blur(${6 * (s - 1) / 2}px)` : "";
       sc.style.visibility = big ? "hidden" : "";
+      // While the scene is hidden, paint the panel colour so no dark page shows around the C.
+      st.style.backgroundColor = big ? "var(--section-indigo)" : "";
       if (pv) {
         const b = ease(a);
         if (a > 0) {
