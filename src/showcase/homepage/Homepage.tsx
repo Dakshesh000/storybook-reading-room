@@ -271,7 +271,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       if (n) n.style.marginTop = reduce.matches ? "" : `${-H}px`;
       // Land the next section's content below the sticky menu (bars measured live).
       const hd = document.querySelector("header");
-      if (n) n.style.setProperty("--intro-offset", `${(hd ? hd.getBoundingClientRect().bottom - window.scrollY * 0 : 130) + 48}px`);
+      if (n) n.style.setProperty("--intro-offset", `${(hd ? hd.getBoundingClientRect().bottom : 130) + 48}px`);
       // Vector copy of the headline, aligned to the live text (scroll-independent coords).
       const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize);
       const wr = w.getBoundingClientRect(), kr = kEl.getBoundingClientRect();
