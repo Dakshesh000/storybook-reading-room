@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { Logo } from "@/index";
 import { cn } from "@/lib/utils";
 import { img } from "./images";
@@ -397,7 +397,7 @@ function Intro() {
           </p>
           <div className="flex flex-col gap-6">
             <p className={cn(t.h3, "max-w-sm")}>
-              <InkReveal text="“They shipped our sales agent in three weeks. It books meetings while we sleep.”" />
+              <InkReveal text="“They shipped our sales agent in three weeks. It books meetings while we sleep.”" fill="text-link" />
             </p>
             <div className="flex items-center gap-4">
               <BwImg src={img.priyaShah} alt="Priya Shah" className="size-14 shrink-0 rounded-full object-cover" />
@@ -482,12 +482,21 @@ function BluePanel() {
 }
 
 /* ============ Services ============ */
+/* Each card floods with its own brand colour on hover, from a different side. */
+const flood = {
+  indigoUp: { bg: "var(--section-indigo)", from: "inset(100% 0 0 0)", text: "hover:text-section-indigo-foreground focus-within:text-section-indigo-foreground", muted: "group-hover:text-section-indigo-muted group-focus-within:text-section-indigo-muted" },
+  greenLeft: { bg: "var(--section-green)", from: "inset(0 100% 0 0)", text: "hover:text-section-green-foreground focus-within:text-section-green-foreground", muted: "group-hover:text-section-green-muted group-focus-within:text-section-green-muted" },
+  blueCircle: { bg: "var(--section-blue)", from: "circle(0% at 18% 22%)", to: "circle(150% at 18% 22%)", text: "hover:text-section-blue-foreground focus-within:text-section-blue-foreground", muted: "group-hover:text-section-blue-muted group-focus-within:text-section-blue-muted" },
+  evergreenDown: { bg: "var(--section-evergreen)", from: "inset(0 0 100% 0)", text: "hover:text-section-evergreen-foreground focus-within:text-section-evergreen-foreground", muted: "group-hover:text-section-evergreen-muted group-focus-within:text-section-evergreen-muted" },
+  indigoRight: { bg: "var(--section-indigo)", from: "inset(0 0 0 100%)", text: "hover:text-section-indigo-foreground focus-within:text-section-indigo-foreground", muted: "group-hover:text-section-indigo-muted group-focus-within:text-section-indigo-muted" },
+};
+
 const services = [
-  { t: "AI strategy & consulting", d: "Get a clear roadmap on how AI can drive growth and efficiency for your business.", a: img.illuStrategy, c: img.illuStrategyColor, wide: true },
-  { t: "AI content creation", d: "Produce on-brand video, copy and visuals at scale with AI-assisted workflows.", a: img.illuContent, c: img.illuContentColor, wide: true },
-  { t: "AI agent development", d: "Design and deploy AI agents built specifically to solve your unique business challenges.", a: img.illuAgent, c: img.illuAgentColor },
-  { t: "CRM AI automation", d: "Automate customer interactions and follow-ups to keep relationships strong and organized.", a: img.illuCrm, c: img.illuCrmColor },
-  { t: "AI process automation", d: "Transform repetitive workflows into smooth, automated systems that save time.", a: img.illuProcess, c: img.illuProcessColor },
+  { t: "AI strategy & consulting", d: "Get a clear roadmap on how AI can drive growth and efficiency for your business.", a: img.illuStrategy, c: img.illuStrategyColor, wide: true, f: flood.indigoUp },
+  { t: "AI content creation", d: "Produce on-brand video, copy and visuals at scale with AI-assisted workflows.", a: img.illuContent, c: img.illuContentColor, wide: true, f: flood.greenLeft },
+  { t: "AI agent development", d: "Design and deploy AI agents built specifically to solve your unique business challenges.", a: img.illuAgent, c: img.illuAgentColor, f: flood.blueCircle },
+  { t: "CRM AI automation", d: "Automate customer interactions and follow-ups to keep relationships strong and organized.", a: img.illuCrm, c: img.illuCrmColor, f: flood.evergreenDown },
+  { t: "AI process automation", d: "Transform repetitive workflows into smooth, automated systems that save time.", a: img.illuProcess, c: img.illuProcessColor, f: flood.indigoRight },
 ];
 
 function ServiceCard({ s }: { s: (typeof services)[number] }) {
@@ -497,9 +506,11 @@ function ServiceCard({ s }: { s: (typeof services)[number] }) {
       <img src={s.c} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-move group-hover:opacity-100" />
     </>
   );
+  const vars = { "--flood-bg": s.f.bg, "--flood-from": s.f.from, ...("to" in s.f ? { "--flood-to": s.f.to } : {}) } as CSSProperties;
   return (
-    <article className={cn(
-      "group relative flex min-h-80 flex-col overflow-hidden rounded-frame border border-border bg-card p-6 transition-colors duration-hover hover:bg-background-alt md:p-8",
+    <article style={vars} className={cn(
+      "flood group flex min-h-80 flex-col rounded-frame border border-border bg-card p-6 transition-[color,border-color] duration-move ease-konsol hover:border-transparent md:p-8",
+      s.f.text,
       s.wide ? "justify-end" : "justify-between gap-8",
     )}>
       <div className={cn(
@@ -508,7 +519,7 @@ function ServiceCard({ s }: { s: (typeof services)[number] }) {
       )}>{illu}</div>
       <div className="relative">
         <h3 className={t.h3}>{s.t}</h3>
-        <p className="mt-3 max-w-xs text-sm text-muted-foreground">{s.d}</p>
+        <p className={cn("mt-3 max-w-xs text-sm text-muted-foreground transition-colors duration-move", s.f.muted)}>{s.d}</p>
       </div>
     </article>
   );
