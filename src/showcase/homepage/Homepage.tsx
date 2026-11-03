@@ -269,6 +269,9 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       H = st.offsetHeight;
       const n = next.current;
       if (n) n.style.marginTop = reduce.matches ? "" : `${-H}px`;
+      // Land the next section's content below the sticky menu (bars measured live).
+      const hd = document.querySelector("header");
+      if (n) n.style.setProperty("--intro-offset", `${(hd ? hd.getBoundingClientRect().bottom - window.scrollY * 0 : 130) + 48}px`);
       // Vector copy of the headline, aligned to the live text (scroll-independent coords).
       const cs = getComputedStyle(el), fs = parseFloat(cs.fontSize);
       const wr = w.getBoundingClientRect(), kr = kEl.getBoundingClientRect();
@@ -386,7 +389,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
 /* ============ Intro ============ */
 function Intro() {
   return (
-    <section className={cn(wrap, "px-6 pb-20 pt-12")}>
+    <section className={cn(wrap, "px-6 pb-20 pt-[var(--intro-offset,3rem)]")}>
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
         <div className="flex min-w-0 flex-col justify-between gap-8">
           <p className="flex items-center gap-2 text-muted-foreground">
