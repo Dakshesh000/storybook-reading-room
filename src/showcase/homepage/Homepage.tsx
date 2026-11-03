@@ -304,7 +304,7 @@ function Hero({ onLight, next }: { onLight: (light: boolean) => void; next: RefO
       const p = Z ? hold / Z : 1;
       const e = ease(p);
       const vw = window.innerWidth, vh = window.innerHeight;
-      const vTop = top0 - window.scrollY + hold; // viewport top of the pinned section
+      const vTop = sec.current!.getBoundingClientRect().top + hold; // viewport top of the pinned section
       const s = Math.pow(maxScale, e);
       const ox = O.x, oy = O.y + vTop;
       const cx = ox + (vw / 2 - ox) * e, cy = oy + (vh / 2 - oy) * e;
