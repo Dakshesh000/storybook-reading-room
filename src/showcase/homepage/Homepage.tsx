@@ -27,7 +27,7 @@ const clients = ["QuartzAI", "Pollinate", "Nietzsche", "45 Degrees", "Railspeed"
 function ThemeBar() {
   return (
     <div className="dark sticky top-0 z-[60] flex items-center justify-center gap-2 border-b border-border bg-background/90 py-2 backdrop-blur">
-      <Link to="/" className={cn(t.label, "rounded-[4px] text-muted-foreground hover:text-foreground", ring)}>Konsol</Link>
+      <Link to="/brand" className={cn(t.label, "rounded-[4px] text-muted-foreground hover:text-foreground", ring)}>Konsol</Link>
     </div>
   );
 }

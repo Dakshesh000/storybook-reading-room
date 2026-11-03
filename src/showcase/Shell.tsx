@@ -3,12 +3,12 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Logo, MonoLabel, Container } from "@/index";
 
 const nav = [
-  { to: "/", label: "Overview" },
-  { to: "/colors", label: "Colours" },
-  { to: "/typography", label: "Typography" },
-  { to: "/logos", label: "Logos" },
-  { to: "/components", label: "Components" },
-  { to: "/homepage", label: "Homepage" },
+  { to: "/brand", label: "Overview" },
+  { to: "/brand/colours", label: "Colours" },
+  { to: "/brand/typography", label: "Typography" },
+  { to: "/brand/logos", label: "Logos" },
+  { to: "/brand/components", label: "Components" },
+  { to: "/", label: "Homepage" },
 ] as const;
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -21,7 +21,7 @@ export function Shell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
         <Container className="flex h-16 items-center gap-6">
-          <Link to="/" className="flex items-center gap-3 rounded-control outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <Link to="/brand" className="flex items-center gap-3 rounded-control outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <Logo color={dark ? "white" : "black"} className="size-8" />
             <span className="font-semibold tracking-tight">The Konsol</span>
             <MonoLabel className="text-muted-foreground hidden sm:inline">Design system</MonoLabel>
